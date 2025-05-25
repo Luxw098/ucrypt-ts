@@ -1,10 +1,10 @@
-import hash from "./util/hash.ts";
-import file from "./util/file.ts";
-import jwt from "./util/jwt.ts";
-import rsa from "./util/rsa.ts";
-import mfa from "./util/mfa.ts";
-import type { UcryptType } from "./types/UcryptType.ts";
-import { defaults } from "./defaults.ts";
+import hash from "./class/hash";
+import file from "./class/file";
+import jwt from "./class/jwt";
+import rsa from "./class/rsa";
+import mfa from "./class/mfa";
+import type { UcryptType } from "./types/UcryptType";
+import { defaults } from "./defaults";
 
 export default class ucrypt {
 	public hash;
@@ -22,9 +22,11 @@ export default class ucrypt {
 
 		this.hash = new hash(this.options.hash);
 		this.file = new file(this.options.file);
-		this.jwt = new jwt(this.options.jwt);
-		this.rsa = new rsa(this.options.rsa);
 		this.mfa = new mfa(this.options.mfa);
+		this.jwt = "";
+		//this.jwt = new jwt(this.options.jwt);
+		this.rsa = "";
+		//this.rsa = new rsa(this.options.rsa);
 	}
 }
 

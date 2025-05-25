@@ -3,6 +3,7 @@ import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 import globals from 'globals';
+import { isNonNullExpression } from 'typescript';
 
 export default [
   // Base ESLint recommended rules
@@ -45,7 +46,8 @@ export default [
         overrides: {
           constructors: 'explicit'
         }
-      }]
+      }],
+      '@typescript-eslint/no-non-null-assertion': 'off'
     }
   }
 ];
