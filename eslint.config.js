@@ -33,14 +33,19 @@ export default [
       }
     }
   },
-  
-  // Prettier plugin and rules
+    // Prettier plugin and rules
   {
     plugins: {
       prettier: prettierPlugin
     },
     rules: {
-      'prettier/prettier': 'error'
+      'prettier/prettier': 'error',
+      '@typescript-eslint/explicit-member-accessibility': ['error', {
+        accessibility: 'explicit',
+        overrides: {
+          constructors: 'explicit'
+        }
+      }]
     }
   }
 ];
