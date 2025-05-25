@@ -1,24 +1,31 @@
-import hash from './util/hash.ts';
-import file from './util/file.ts';
-import jwt from './util/jwt.ts';
-import rsa from './util/rsa.ts';
-import mfa from './util/mfa.ts';
+import hash from "./util/hash.ts";
+import file from "./util/file.ts";
+import jwt from "./util/jwt.ts";
+import rsa from "./util/rsa.ts";
+import mfa from "./util/mfa.ts";
+import type { UcryptType } from "./types/UcryptType.ts";
+import { defaults } from "./defaults.ts";
 
 export default class ucrypt {
-  public defaults: Record<string, unknown> = {};
-  public constructor(defaults: typeof this.defaults) {
-    this.defaults = {
-      // defaults here
-      hash: 'sha256',
-      ...defaults,
-    };
-  }
+	public hash;
+	public file;
+	public jwt;
+	public rsa;
+	public mfa;
 
-  public hash = new hash();
-  public file = new file();
-  public jwt = new jwt();
-  public rsa = new rsa();
-  public mfa = new mfa();
+	private options: UcryptType;
+	public constructor(options: typeof this.options) {
+		this.options = {
+			...defaults,
+			...options
+		};
+
+		this.hash = new hash(this.options.hash);
+		this.file = new file(this.options.file);
+		this.jwt = new jwt(this.options.jwt);
+		this.rsa = new rsa(this.options.rsa);
+		this.mfa = new mfa(this.options.mfa);
+	}
 }
 
 /*

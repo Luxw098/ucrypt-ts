@@ -1,3 +1,5 @@
+import type { CipherCCMTypes, CipherGCMTypes, CipherOCBTypes, RSAKeyPairOptions } from "crypto";
+
 export interface UcryptType {
 	hash: {
 		algorithm: "sha256" | "sha512" | "md5";
@@ -10,8 +12,17 @@ export interface UcryptType {
 	};
 	rsa: {
 		keySize: number;
-		publicAlgorithm: "pkcs1" | "spki";
-		privateAlgorithm: "pkcs1" | "pkcs8";
-		padding: "pkcs1" | "oaep";
+		publicAlgorithm: RSAKeyPairOptions<"pem", "pem">["publicKeyEncoding"]["type"];
+		privateAlgorithm: RSAKeyPairOptions<"pem", "pem">["privateKeyEncoding"]["type"];
+	};
+	mfa: {
+		algorithm: "sha1" | "sha256";
+		digits: number;
+		period: number;
+	};
+	file: {
+		algorithm: CipherCCMTypes | CipherGCMTypes | CipherOCBTypes;
+		keySize: number;
+		ivSize: number;
 	};
 }
