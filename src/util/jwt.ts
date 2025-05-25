@@ -1,3 +1,1 @@
-export default class jwt {
-    
-}
+export default class jwt {}

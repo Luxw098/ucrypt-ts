@@ -1,3 +1,1 @@
-export default class mfa {
-    
-};
+export default class mfa {}

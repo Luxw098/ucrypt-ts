@@ -1,7 +1,7 @@
 # ucrypt-ts
 > A simple package for keeping your user's data secure.
 
-## Features
+## Tested Features
 - **Hash Functions**
   - [ ] SHA-256
   - [ ] SHA-512

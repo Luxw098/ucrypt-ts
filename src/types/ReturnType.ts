@@ -1,4 +1,4 @@
 export interface ReturnType {
-    status: string,
-    message: string,
+  status: string;
+  message: string;
 }
