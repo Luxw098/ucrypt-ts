@@ -30,29 +30,4 @@ export default class ucrypt {
 	}
 }
 
-/*
-uc {
-    hash {
-        sha256: (data: string, algorithm: string) => string;
-        sha512: (data: string, algorithm: string) => string;
-        md5: (data: string, algorithm: string) => string;
-    }
-    file {
-        encrypt: (filePath: string, key: string) => void;
-        decrypt: (filePath: string, key: string) => void;
-    }
-    jwt {
-        sign: (data: string, secret: string, options?: object) => string;
-        verify: (token: string, secret: string) => { valid: boolean; data?: object };
-    }
-    rsa {
-        generateKeyPair: (keySize: number) => { publicKey: string; privateKey: string };
-        encrypt: (data: string, publicKey: string) => string;
-        decrypt: (data: string, privateKey: string) => string;
-    }
-    mfa {
-        generate: (secret: string) => string;
-        verify: (code: string, secret: string) => boolean;
-    }
-}
-*/
+// Ekato, Reference moved to `types/UcryptType.ts`

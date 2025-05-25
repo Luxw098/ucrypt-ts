@@ -1,7 +1,7 @@
 import { ReturnFalse, ReturnTrue, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
-import crypto from "crypto";
 import { b32 } from "../util/b32";
+import crypto from "crypto";
 export default class mfa {
 	private options: UcryptType["mfa"];
 	public constructor(options: UcryptType["mfa"]) {

@@ -10,12 +10,12 @@ export default class file {
 		this.options = options;
 	}
 
-	public encrypt(filePath: string, key: string) {
+	public encrypt() {
 		// TODO: Implement file encryption
 		// Using crypto module for encryption
 	}
 
-	public decrypt(filePath: string, key: string) {
+	public decrypt() {
 		// TODO: Implement file decryption
 		// Using crypto module for decryption
 	}

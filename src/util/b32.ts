@@ -1,5 +1,8 @@
-export class b32 {
-	public static btoa32(buffer: Buffer): string {
+// This exists because MFA expects Base32 encoding not base64 which btoa and atob provide
+// they are named a32 because btoa32 means Bytes to Ascii32, Its named like way because it used to convert to Ascii not Base.
+
+export const b32 = {
+	btoa32(buffer: Buffer): string {
 		const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 		let result = "";
 		let bits = 0;
@@ -20,9 +23,8 @@ export class b32 {
 		}
 
 		return result;
-	}
-
-	public static a32tob(base32: string): Buffer {
+	},
+	a32tob(base32: string): Buffer {
 		const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 		base32 = base32.toUpperCase().replace(/=+$/, "");
 
@@ -45,4 +47,4 @@ export class b32 {
 
 		return Buffer.from(result);
 	}
-}
+};

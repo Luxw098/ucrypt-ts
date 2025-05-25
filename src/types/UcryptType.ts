@@ -24,3 +24,5 @@ export interface UcryptType {
 	};
 	file: ZlibOptions;
 }
+
+// Remember u can control click stuff btw to see the types :3
