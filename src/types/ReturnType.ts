@@ -8,16 +8,16 @@ export type ReturnType<T> =
 			data: Error;
 	  };
 
-export const ReturnTrue = (data: any) => {
+export function ReturnTrue<T>(data: unknown) {
 	return {
 		status: true,
 		data: data
-	} as ReturnType<any>;
-};
+	} as ReturnType<T>;
+}
 
-export const ReturnFalse = (error: Error) => {
+export function ReturnFalse<T>(error: Error) {
 	return {
 		status: false,
 		data: error
-	} as ReturnType<any>;
-};
+	} as ReturnType<T>;
+}

@@ -1,8 +1,9 @@
+import type { SupportedCryptoAlgorithms } from "bun";
 import type { CipherCCMTypes, CipherGCMTypes, CipherOCBTypes, RSAKeyPairOptions } from "crypto";
 
 export interface UcryptType {
 	hash: {
-		algorithm: "sha256" | "sha512" | "md5";
+		algorithm: SupportedCryptoAlgorithms;
 		salt: boolean;
 		pepper: boolean;
 	};
@@ -16,7 +17,7 @@ export interface UcryptType {
 		privateAlgorithm: RSAKeyPairOptions<"pem", "pem">["privateKeyEncoding"]["type"];
 	};
 	mfa: {
-		algorithm: "sha1" | "sha256";
+		algorithm: SupportedCryptoAlgorithms;
 		digits: number;
 		period: number;
 	};
