@@ -1,5 +1,6 @@
 import type { SupportedCryptoAlgorithms } from "bun";
-import type { CipherCCMTypes, CipherGCMTypes, CipherOCBTypes, RSAKeyPairOptions } from "crypto";
+import type { RSAKeyPairOptions } from "crypto";
+import type { ZlibOptions } from "zlib";
 
 export interface UcryptType {
 	hash: {
@@ -21,9 +22,5 @@ export interface UcryptType {
 		digits: number;
 		period: number;
 	};
-	file: {
-		algorithm: CipherCCMTypes | CipherGCMTypes | CipherOCBTypes;
-		keySize: number;
-		ivSize: number;
-	};
+	file: ZlibOptions;
 }

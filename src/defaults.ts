@@ -1,4 +1,6 @@
-export const defaults = {
+import type { UcryptType } from "./types/UcryptType";
+
+export const defaults: UcryptType = {
 	hash: {
 		algorithm: "sha256",
 		salt: true,
@@ -10,9 +12,8 @@ export const defaults = {
 	},
 	rsa: {
 		keySize: 2048,
-		publicAlgorithm: "spki",
-		privateAlgorithm: "pkcs8",
-		padding: "oaep"
+		publicAlgorithm: "pkcs1",
+		privateAlgorithm: "pkcs8"
 	},
 	mfa: {
 		algorithm: "sha1",
@@ -20,8 +21,9 @@ export const defaults = {
 		period: 30
 	},
 	file: {
-		algorithm: "aes-256-cbc",
-		keySize: 32,
-		ivSize: 16
+		strategy: 0,
+		memLevel: 6,
+		level: 6,
+		windowBits: 15
 	}
 };

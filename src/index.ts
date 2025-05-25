@@ -1,7 +1,7 @@
 import hash from "./class/hash";
 import file from "./class/file";
-import jwt from "./class/jwt";
-import rsa from "./class/rsa";
+// import jwt from "./class/jwt";
+// import rsa from "./class/rsa";
 import mfa from "./class/mfa";
 import type { UcryptType } from "./types/UcryptType";
 import { defaults } from "./defaults";
@@ -24,9 +24,9 @@ export default class ucrypt {
 		this.file = new file(this.options.file);
 		this.mfa = new mfa(this.options.mfa);
 		this.jwt = "";
-		//this.jwt = new jwt(this.options.jwt);
+		// this.jwt = new jwt(this.options.jwt);
 		this.rsa = "";
-		//this.rsa = new rsa(this.options.rsa);
+		// this.rsa = new rsa(this.options.rsa);
 	}
 }
 

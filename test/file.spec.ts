@@ -1,16 +1,37 @@
-import { expect, test } from 'bun:test';
-import ucrypt from "../src/index.ts";
+import { afterEach, beforeEach, expect, test } from "bun:test";
+import { defaults } from "../src/defaults";
+import ucrypt from "../src/index";
 
-const uc = new ucrypt({});
+import fs from "fs";
 
-// test("name", () => {
-//     expect("value").toBe("expectedValue");
-// });
+const uc = new ucrypt(defaults);
+const testFilePath = "./test/temp-test-file.txt";
 
+beforeEach(() => {
+	fs.writeFileSync(
+		testFilePath,
+		JSON.stringify({
+			username: "admin",
+			password: "password123"
+		})
+	);
+});
 
+afterEach(() => {
+	if (fs.existsSync(testFilePath)) fs.unlinkSync(testFilePath);
+});
 
 test("compress", () => {
-    const fileData = uc.file.compress("./file.spec.json");
-    
-    expect("value").toBe("expectedValue");
+	const result = uc.file.compress(testFilePath);
+
+	expect(result.status).toBe(true);
+	expect(result.data).toBeInstanceOf(Buffer);
+});
+
+test("decompress", () => {
+	uc.file.compress(testFilePath);
+	const result = uc.file.decompress(testFilePath);
+	
+	expect(result.status).toBe(true);
+	expect(result.data).toBeInstanceOf(Buffer);
 });

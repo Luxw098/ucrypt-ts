@@ -7,7 +7,7 @@
     "test": "bun run --watch test/index.ts",
     "format": "prettier --write \"src/**/*.{ts,js}\"",
     "check": "eslint --config eslint.config.js \"src/**/*.{ts,js}\" && prettier --check \"src/**/*.{ts,js}\"",
-    "check:fix": "eslint --config eslint.config.js --fix \"src/**/*.{ts,js}\""
+    "check:fix": "eslint --config eslint.config.js --fix \"{src,test}/**/*.{ts,js}\""
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",

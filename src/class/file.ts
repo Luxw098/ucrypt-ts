@@ -23,7 +23,7 @@ export default class file {
 	public compress(filePath: string) {
 		try {
 			const data = fs.readFileSync(filePath);
-			const compressed = Zlib.gzipSync(data);
+			const compressed = Zlib.gzipSync(data, this.options);
 			fs.writeFileSync(filePath, compressed);
 			return ReturnTrue(compressed);
 		} catch (err) {
@@ -34,7 +34,7 @@ export default class file {
 	public decompress(filePath: string) {
 		try {
 			const data = fs.readFileSync(filePath);
-			const decompressed = Zlib.unzipSync(data);
+			const decompressed = Zlib.gunzipSync(data, this.options);
 			fs.writeFileSync(filePath, decompressed);
 			return ReturnTrue(decompressed);
 		} catch (err) {
