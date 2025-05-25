@@ -21,17 +21,21 @@ afterEach(() => {
 	if (fs.existsSync(testFilePath)) fs.unlinkSync(testFilePath);
 });
 
-test("compress", () => {
+// test("name", () => {
+//     expect("name").toBe("name");
+// });
+
+test("file/compress", () => {
 	const result = uc.file.compress(testFilePath);
 
 	expect(result.status).toBe(true);
 	expect(result.data).toBeInstanceOf(Buffer);
 });
 
-test("decompress", () => {
+test("file/decompress", () => {
 	uc.file.compress(testFilePath);
 	const result = uc.file.decompress(testFilePath);
-	
+
 	expect(result.status).toBe(true);
 	expect(result.data).toBeInstanceOf(Buffer);
 });
