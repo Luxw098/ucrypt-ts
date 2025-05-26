@@ -23,10 +23,10 @@ export default class ucrypt {
 		this.hash = new hash(this.options.hash);
 		this.file = new file(this.options.file);
 		this.mfa = new mfa(this.options.mfa);
+		this.rsa = "";
+		//this.rsa = new rsa(this.options.rsa);
 		this.jwt = "";
 		// this.jwt = new jwt(this.options.jwt);
-		this.rsa = "";
-		// this.rsa = new rsa(this.options.rsa);
 	}
 }
 

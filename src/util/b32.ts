@@ -13,13 +13,13 @@ export const b32 = {
 			bits += 8;
 
 			while (bits >= 5) {
-				result += alphabet[(value >>> (bits - 5)) & 31]!;
+				result += alphabet[(value >>> (bits - 5)) & 31];
 				bits -= 5;
 			}
 		}
 
 		if (bits > 0) {
-			result += alphabet[(value << (5 - bits)) & 31]!;
+			result += alphabet[(value << (5 - bits)) & 31];
 		}
 
 		return result;
