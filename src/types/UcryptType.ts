@@ -1,6 +1,6 @@
 import type { SupportedCryptoAlgorithms } from "bun";
-import type { RSAKeyPairOptions } from "crypto";
 import type { ZlibOptions } from "zlib";
+import type { webcrypto } from "crypto";
 
 export interface UcryptType {
 	hash: {
@@ -14,8 +14,7 @@ export interface UcryptType {
 	};
 	rsa: {
 		keySize: number;
-		publicAlgorithm: RSAKeyPairOptions<"pem", "pem">["publicKeyEncoding"]["type"];
-		privateAlgorithm: RSAKeyPairOptions<"pem", "pem">["privateKeyEncoding"]["type"];
+		Algorithm: webcrypto.AlgorithmIdentifier;
 	};
 	mfa: {
 		algorithm: SupportedCryptoAlgorithms;
