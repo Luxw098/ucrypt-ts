@@ -25,9 +25,11 @@ export const defaults: UcryptType = {
 		period: 30
 	},
 	file: {
-		strategy: 0,
-		memLevel: 6,
-		level: 6,
-		windowBits: 15
+		format: "gzip",
+
+		algorithm: "sha256",
+		chunkSize: 1024 * 1024,
+		ivLength: 12,
+		tagLength: 16 
 	}
 };

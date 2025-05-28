@@ -20,7 +20,14 @@ export interface UcryptType {
 		digits: number;
 		period: number;
 	};
-	file: ZlibOptions;
+	file: {
+		format: CompressionFormat,
+		chunkSize: number;
+
+		algorithm: SupportedCryptoAlgorithms,
+		ivLength: number;
+		tagLength: number;
+	};
 }
 
 // Remember u can control click stuff btw to see the types :3

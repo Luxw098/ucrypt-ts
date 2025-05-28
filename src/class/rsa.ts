@@ -51,4 +51,8 @@ export default class rsa {
 			return ReturnFalse(err as Error);
 		}
 	}
+
+	// TODO: Rotate keypair for ID with previous keypair storage
+	// Create one-to-one Diffie-Hellman key exchange between two users
+	// Create Tree-based group Diffie-Hellman key exchange between a group
 }

@@ -1,9 +1,6 @@
-import fs from "fs";
-import Zlib from "zlib";
-
-import { ReturnFalse, ReturnTrue } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
+//TODO: Create Web-Compatible file class
 export default class file {
 	private options: UcryptType["file"];
 	public constructor(options: UcryptType["file"]) {
@@ -11,36 +8,19 @@ export default class file {
 	}
 
 	public encrypt() {
-		// TODO: Implement file encryption
-		// Using crypto module for encryption
+		throw new Error("Method not implemented.");
 	}
 
 	public decrypt() {
-		// TODO: Implement file decryption
-		// Using crypto module for decryption
+		throw new Error("Method not implemented.");
 	}
 
 	public compress(filePath: string) { 
-		//TODO: Make web compatible
-		try {
-			const data = fs.readFileSync(filePath);
-			const compressed = Zlib.gzipSync(data, this.options);
-			fs.writeFileSync(filePath, compressed);
-			return ReturnTrue(compressed);
-		} catch (err) {
-			return ReturnFalse(err as Error);
-		}
+		throw new Error("Method not implemented.");
 	}
 
 	public decompress(filePath: string) {
-		try {
-			const data = fs.readFileSync(filePath);
-			const decompressed = Zlib.gunzipSync(data, this.options);
-			fs.writeFileSync(filePath, decompressed);
-			return ReturnTrue(decompressed);
-		} catch (err) {
-			return ReturnFalse(err as Error);
-		}
+		throw new Error("Method not implemented.");
 	}
 
 	// TODO metadata scrambling / stripping meta
