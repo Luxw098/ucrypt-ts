@@ -1,5 +1,4 @@
 import type { SupportedCryptoAlgorithms } from "bun";
-import type { ZlibOptions } from "zlib";
 
 export interface UcryptType {
 	hash: {
@@ -21,10 +20,10 @@ export interface UcryptType {
 		period: number;
 	};
 	file: {
-		format: CompressionFormat,
+		format: CompressionFormat;
 		chunkSize: number;
 
-		algorithm: SupportedCryptoAlgorithms,
+		algorithm: SupportedCryptoAlgorithms;
 		ivLength: number;
 		tagLength: number;
 	};

@@ -1,3 +1,4 @@
+import { ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
 //TODO: Create Web-Compatible file class
@@ -7,19 +8,19 @@ export default class file {
 		this.options = options;
 	}
 
-	public encrypt() {
+	public encrypt(file: string, key: string): ReturnType<Uint8Array> {
 		throw new Error("Method not implemented.");
 	}
 
-	public decrypt() {
+	public decrypt(file: string, key: string): ReturnType<Uint8Array> {
 		throw new Error("Method not implemented.");
 	}
 
-	public compress(filePath: string) { 
+	public compress(file: string): ReturnType<Uint8Array> {
 		throw new Error("Method not implemented.");
 	}
 
-	public decompress(filePath: string) {
+	public decompress(file: string): ReturnType<Uint8Array> {
 		throw new Error("Method not implemented.");
 	}
 
