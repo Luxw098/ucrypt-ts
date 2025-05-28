@@ -17,21 +17,27 @@ test("rsa/generateKeyPair", async () => {
 
 test("rsa/encrypt", async () => {
 	const keyPair = await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]);
-	if (!keyPair.status) return;
 
-	const encryptedData = await uc.rsa.encrypt("Hello, RSA!", keyPair.data.publicKey);
+	const encryptedData = await uc.rsa.encrypt(
+		"Hello, RSA!",
+		(keyPair.data as CryptoKeyPair).publicKey
+	);
 	expect(encryptedData.status).toBe(true);
 	expect(typeof encryptedData.data).toBe("string");
 });
 
 test("rsa/decrypt", async () => {
 	const keyPair = await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]);
-	if (!keyPair.status) return;
 
-	const encryptedData = await uc.rsa.encrypt("Hello, RSA!", keyPair.data.publicKey);
-	if (!encryptedData.status) return;
+	const encryptedData = await uc.rsa.encrypt(
+		"Hello, RSA!",
+		(keyPair.data as CryptoKeyPair).publicKey
+	);
 
-	const decryptedData = await uc.rsa.decrypt(encryptedData.data, keyPair.data.privateKey);
+	const decryptedData = await uc.rsa.decrypt(
+		encryptedData.data as string,
+		(keyPair.data as CryptoKeyPair).privateKey
+	);
 	expect(decryptedData.status).toBe(true);
 	expect(decryptedData.data).toBe("Hello, RSA!");
 });

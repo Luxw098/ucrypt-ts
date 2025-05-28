@@ -8,6 +8,7 @@ export interface UcryptType {
 	};
 	jwt: {
 		algorithm: "HS256" | "HS512" | "RS256";
+		hash: SupportedCryptoAlgorithms;
 		expiresAfter: string;
 	};
 	rsa: {

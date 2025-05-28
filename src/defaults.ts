@@ -8,6 +8,7 @@ export const defaults: UcryptType = {
 	},
 	jwt: {
 		algorithm: "HS256",
+		hash: "sha256",
 		expiresAfter: "1h"
 	},
 	rsa: {
@@ -30,6 +31,6 @@ export const defaults: UcryptType = {
 		algorithm: "sha256",
 		chunkSize: 1024 * 1024,
 		ivLength: 12,
-		tagLength: 16 
+		tagLength: 16
 	}
 };
