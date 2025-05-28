@@ -13,24 +13,26 @@ export default class rsa {
 	): Promise<ReturnType<CryptoKeyPair>> {
 		try {
 			const key_pair = await crypto.subtle.generateKey(
-				this.options.Algorithm,
+				this.options.genParams,
 				extractable,
 				usages
 			);
+			
 			return ReturnTrue(key_pair);
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
 	}
 
-	public async encrypt(data: string, publicKey: CryptoKey): Promise<ReturnType<string>> {
+	public async encrypt(data: any, publicKey: CryptoKey): Promise<ReturnType<string>> {
 		try {
 			const encrypted_data = await crypto.subtle.encrypt(
-				this.options.Algorithm,
+				this.options.genParams.name,
 				publicKey,
-				Buffer.from(data)
+				new TextEncoder().encode(data)
 			);
-			return ReturnTrue(new Uint8Array(encrypted_data).toString());
+
+			return ReturnTrue(Buffer.from(encrypted_data).toString("base64"));
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
@@ -39,11 +41,12 @@ export default class rsa {
 	public async decrypt(data: string, privateKey: CryptoKey): Promise<ReturnType<string>> {
 		try {
 			const decrypted_Data = await crypto.subtle.decrypt(
-				this.options.Algorithm,
+				this.options.genParams.name,
 				privateKey,
-				Buffer.from(data)
+				Uint8Array.from(Buffer.from(data, "base64"))
 			);
-			return ReturnTrue(new Uint8Array(decrypted_Data).toString());
+
+			return ReturnTrue(new TextDecoder().decode(decrypted_Data));
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}

@@ -11,9 +11,13 @@ export const defaults: UcryptType = {
 		expiresAfter: "1h"
 	},
 	rsa: {
-		keySize: 2048,
-		publicAlgorithm: "pkcs1",
-		privateAlgorithm: "pkcs8"
+		genParams: {
+			name: "RSA-OAEP",
+			hash: { name: "SHA-256" },
+			modulusLength: 2048,
+			publicExponent: new Uint8Array([1, 0, 1])
+		},
+		keySize: 2048
 	},
 	mfa: {
 		algorithm: "sha1",

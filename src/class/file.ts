@@ -20,7 +20,8 @@ export default class file {
 		// Using crypto module for decryption
 	}
 
-	public compress(filePath: string) {
+	public compress(filePath: string) { 
+		//TODO: Make web compatible
 		try {
 			const data = fs.readFileSync(filePath);
 			const compressed = Zlib.gzipSync(data, this.options);
