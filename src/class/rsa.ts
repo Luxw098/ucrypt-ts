@@ -12,7 +12,11 @@ export default class rsa {
 		usages: KeyUsage[]
 	): Promise<ReturnType<CryptoKeyPair>> {
 		try {
-			const key_pair = await crypto.subtle.generateKey(this.options.Algorithm, extractable, usages);
+			const key_pair = await crypto.subtle.generateKey(
+				this.options.Algorithm,
+				extractable,
+				usages
+			);
 			return ReturnTrue(key_pair);
 		} catch (err) {
 			return ReturnFalse(err as Error);
