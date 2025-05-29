@@ -26,13 +26,20 @@ export default class rsa {
 
 	public async encrypt(data: unknown, publicKey: CryptoKey): Promise<ReturnType<string>> {
 		try {
-			const encrypted_data = await crypto.subtle.encrypt(
-				this.options.gen_params.name,
-				publicKey,
-				new TextEncoder().encode(JSON.stringify(data))
-			);
+			const encrypted_data: string[] = [];
+			const chunks = JSON.stringify(data).match(/[\s\S]{1,110}/g);
+			if (!chunks) return ReturnFalse(new Error("Data is too large to encrypt"));
+			for (const chunk of chunks) {
+				const encrypted_chunk = await crypto.subtle.encrypt(
+					this.options.gen_params.name,
+					publicKey,
+					new TextEncoder().encode(chunk)
+				);
 
-			return ReturnTrue(Buffer.from(encrypted_data).toString("base64"));
+				encrypted_data.push(Buffer.from(encrypted_chunk).toString("base64"));
+			}
+
+			return ReturnTrue(encrypted_data.join("|"));
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
@@ -40,13 +47,20 @@ export default class rsa {
 
 	public async decrypt(data: string, privateKey: CryptoKey): Promise<ReturnType<string>> {
 		try {
-			const decrypted_data = await crypto.subtle.decrypt(
-				this.options.gen_params.name,
-				privateKey,
-				Uint8Array.from(Buffer.from(data, "base64"))
-			);
+			const decrypted_data = [];
+			const decoder = new TextDecoder();
+			const chunks = data.split("|");
+			for (const chunk of chunks) {
+				const decoded_chunk = Buffer.from(chunk, "base64");
+				const decrypted_chunk = await crypto.subtle.decrypt(
+					this.options.gen_params.name,
+					privateKey,
+					decoded_chunk
+				);
 
-			return ReturnTrue(new TextDecoder().decode(decrypted_data));
+				decrypted_data.push(decoder.decode(decrypted_chunk));
+			}
+			return ReturnTrue(JSON.parse(decrypted_data.join("")));
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}

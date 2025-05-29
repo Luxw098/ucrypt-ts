@@ -1,3 +1,7 @@
+(() => {
+	throw new Error('Awaiting implementation of "file.ts"');
+})();
+
 import { afterEach, beforeEach, expect, test } from "bun:test";
 import { defaults } from "../src/defaults";
 import ucrypt from "../src/index";

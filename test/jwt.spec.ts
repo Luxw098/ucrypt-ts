@@ -1,10 +1,18 @@
 import { expect, test } from "bun:test";
 import { defaults } from "../src/defaults";
 import ucrypt from "../src";
+import { JWTPayloadType } from "../src/types/JWTPayloadType";
 
 const uc = new ucrypt(defaults);
+
+const time = Math.floor(Date.now() / 1000);
 const secret = crypto.randomUUID();
-const payload = {
+const payload: JWTPayloadType = {
+	issuer: "ucrypt",
+	subject: "test",
+	issuedAt: time,
+	expiration: time + 60 * 60, // 1 hour
+	notBefore: time,
 	user: "admin",
 	pass: "admin"
 };

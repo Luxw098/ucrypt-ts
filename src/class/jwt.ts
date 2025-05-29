@@ -74,7 +74,6 @@ export default class jwt {
 				signature,
 				encoder.encode(data_to_verify)
 			);
-			console.log("verify", verify);
 
 			return ReturnTrue(verify);
 		} catch (err) {
