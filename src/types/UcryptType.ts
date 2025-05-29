@@ -1,6 +1,4 @@
 import type { SupportedCryptoAlgorithms } from "bun";
-import type { RSAKeyPairOptions } from "crypto";
-import type { ZlibOptions } from "zlib";
 
 export interface UcryptType {
 	hash: {
@@ -10,19 +8,29 @@ export interface UcryptType {
 	};
 	jwt: {
 		algorithm: "HS256" | "HS512" | "RS256";
-		expiresAfter: string;
+		hash: SupportedCryptoAlgorithms;
+		expires_after: string;
 	};
 	rsa: {
-		keySize: number;
-		publicAlgorithm: RSAKeyPairOptions<"pem", "pem">["publicKeyEncoding"]["type"];
-		privateAlgorithm: RSAKeyPairOptions<"pem", "pem">["privateKeyEncoding"]["type"];
+		key_size: number;
+		gen_params: RsaHashedKeyGenParams;
 	};
 	mfa: {
-		algorithm: SupportedCryptoAlgorithms;
+		hash_algorithm: SupportedCryptoAlgorithms;
+		// Code length and duration
 		digits: number;
 		period: number;
 	};
-	file: ZlibOptions;
+	file: {
+		// Compression
+		format: CompressionFormat;
+		chunk_size: number;
+
+		// Encryption
+		algorithm: SupportedCryptoAlgorithms;
+		iv_length: number;
+		tag_length: number;
+	};
 }
 
 // Remember u can control click stuff btw to see the types :3

@@ -1,4 +1,4 @@
-import crypto, { type BinaryToTextEncoding } from "crypto";
+import { cryptoTranslator as crypto } from "../translations/CryptoTranslator";
 import { ReturnFalse, ReturnTrue, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
@@ -7,10 +7,13 @@ export default class hash {
 	public constructor(options: UcryptType["hash"]) {
 		this.options = options;
 	}
-	public digest(data: string, type: BinaryToTextEncoding = "hex"): ReturnType<string> {
+	public async digest(data: string): Promise<ReturnType<string>> {
 		try {
-			const hash = crypto.createHash(this.options.algorithm).update(data).digest(type);
-			return ReturnTrue(hash);
+			const hash = await crypto.subtle.digest(
+				this.options.algorithm,
+				new TextEncoder().encode(data)
+			);
+			return ReturnTrue(new Uint8Array(hash).toString());
 		} catch {
 			return ReturnFalse(new Error("Failed to create hash"));
 		}

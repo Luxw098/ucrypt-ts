@@ -1,68 +1,70 @@
 import { ReturnFalse, ReturnTrue, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 import { b32 } from "../util/b32";
-import crypto from "crypto";
+import { cryptoTranslator as crypto } from "../translations/CryptoTranslator";
 export default class mfa {
 	private options: UcryptType["mfa"];
 	public constructor(options: UcryptType["mfa"]) {
 		this.options = options;
 	}
 
-	public generateSecret(length = 20): ReturnType<string> {
+	public generateSecret(length: number): ReturnType<string> {
 		try {
-			const buffer = crypto.randomBytes(length);
-			const secret = b32.btoa32(buffer);
-			return ReturnTrue(secret);
+			const random_bytes = new Uint32Array(length);
+			// @ts-expect-error this is correct?
+			crypto.getRandomValues(random_bytes);
+			return ReturnTrue(b32.btoa32(Buffer.from(random_bytes.buffer)));
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
 	}
 
-	public generate(secret: string, previous = 0): ReturnType<string> {
+	public async generateTOTP(secret: string, interval = 0): Promise<ReturnType<string>> {
 		try {
-			const currentCounter = Math.floor(Date.now() / 1000 / this.options.period);
-			let adjustedCounter = currentCounter - previous;
+			const counter = Math.floor(Date.now() / 1000 / this.options.period) - interval;
+			const counter_buffer = new ArrayBuffer(8);
+			const view = new DataView(counter_buffer);
+			view.setBigUint64(0, BigInt(counter), false);
 
-			const counterBuffer = Buffer.alloc(8);
-			for (let i = 7; i >= 0; i--) {
-				counterBuffer[i] = adjustedCounter & 0xff;
-				adjustedCounter >>= 8;
-			}
+			const key = await crypto.subtle.importKey(
+				"raw",
+				b32.a32tob(secret),
+				{
+					name: "HMAC",
+					hash: { name: this.options.hash_algorithm }
+				},
+				false,
+				["sign"]
+			);
 
-			const secretBuffer = b32.a32tob(secret);
+			const signature = await crypto.subtle.sign({ name: "HMAC" }, key, counter_buffer);
+			const hash = new Uint8Array(signature);
+			const offset = hash[hash.length - 1] & 0xf;
+			const code =
+				((hash[offset] & 0x7f) << 24) |
+				((hash[offset + 1] & 0xff) << 16) |
+				((hash[offset + 2] & 0xff) << 8) |
+				(hash[offset + 3] & 0xff);
 
-			const hmac = crypto
-				.createHmac(this.options.algorithm, secretBuffer)
-				.update(counterBuffer)
-				.digest();
-			const offset = hmac[hmac.length - 1]! & 0xf;
-			const binary =
-				((hmac[offset]! & 0x7f) << 24) |
-				((hmac[offset + 1]! & 0xff) << 16) |
-				((hmac[offset + 2]! & 0xff) << 8) |
-				(hmac[offset + 3]! & 0xff); //Ai wrote these bit operations i dont know bit manipulation
+			const otp = code % Math.pow(10, this.options.digits);
 
-			const token = binary % Math.pow(10, this.options.digits);
-			const code = token.toString().padStart(this.options.digits, "0");
-
-			return ReturnTrue(code);
+			return ReturnTrue(otp.toString().padStart(this.options.digits, "0"));
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
 	}
 
-	public verify(code: string, secret: string): ReturnType<boolean> {
+	public async verifyTOTP(code: string, secret: string): Promise<ReturnType<boolean>> {
 		try {
-			if (code.length !== this.options.digits || !/^\d+$/.test(code))
-				return ReturnFalse(new Error("Invalid code format"));
+			const generated_code = await this.generateTOTP(secret);
+			const previous_code = await this.generateTOTP(secret, 1);
+			if (!generated_code.status || !previous_code.status)
+				return ReturnFalse(new Error("Failed to generate TOTP codes"));
 
-			const currentCode = this.generate(secret, 0);
-			if (currentCode.status && currentCode.data === code) return ReturnTrue(true);
+			if (generated_code.data === code || previous_code.data === code)
+				return ReturnTrue(true);
 
-			const previousCode = this.generate(secret, 1);
-			if (previousCode.status && previousCode.data === code) return ReturnTrue(true);
-
-			return ReturnTrue(false);
+			return ReturnTrue(generated_code.data === code);
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}

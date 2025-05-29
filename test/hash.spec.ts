@@ -8,8 +8,8 @@ const uc = new ucrypt(defaults);
 //     expect("name").toBe("name");
 // });
 
-test("hash/digest", () => {
-	const result = uc.hash.digest("Hello, World!", "hex");
+test("hash/digest", async () => {
+	const result = await uc.hash.digest("Hello, World!");
 
 	expect(result.status).toBe(true);
 	expect(result.data).toBeTypeOf("string");

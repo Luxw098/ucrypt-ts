@@ -1,45 +1,27 @@
-import fs from "fs";
-import Zlib from "zlib";
-
-import { ReturnFalse, ReturnTrue } from "../types/ReturnType";
+import { ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
+//TODO: Create Web-Compatible file class
 export default class file {
 	private options: UcryptType["file"];
 	public constructor(options: UcryptType["file"]) {
 		this.options = options;
 	}
 
-	public encrypt() {
-		// TODO: Implement file encryption
-		// Using crypto module for encryption
+	public encrypt(file: string, key: string): ReturnType<Uint8Array> {
+		throw new Error("Method not implemented.");
 	}
 
-	public decrypt() {
-		// TODO: Implement file decryption
-		// Using crypto module for decryption
+	public decrypt(file: string, key: string): ReturnType<Uint8Array> {
+		throw new Error("Method not implemented.");
 	}
 
-	public compress(filePath: string) {
-		try {
-			const data = fs.readFileSync(filePath);
-			const compressed = Zlib.gzipSync(data, this.options);
-			fs.writeFileSync(filePath, compressed);
-			return ReturnTrue(compressed);
-		} catch (err) {
-			return ReturnFalse(err as Error);
-		}
+	public compress(file: string): ReturnType<Uint8Array> {
+		throw new Error("Method not implemented.");
 	}
 
-	public decompress(filePath: string) {
-		try {
-			const data = fs.readFileSync(filePath);
-			const decompressed = Zlib.gunzipSync(data, this.options);
-			fs.writeFileSync(filePath, decompressed);
-			return ReturnTrue(decompressed);
-		} catch (err) {
-			return ReturnFalse(err as Error);
-		}
+	public decompress(file: string): ReturnType<Uint8Array> {
+		throw new Error("Method not implemented.");
 	}
 
 	// TODO metadata scrambling / stripping meta

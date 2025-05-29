@@ -5,6 +5,8 @@ import file from "./class/file";
 import mfa from "./class/mfa";
 import type { UcryptType } from "./types/UcryptType";
 import { defaults } from "./defaults";
+import rsa from "./class/rsa";
+import jwt from "./class/jwt";
 
 export default class ucrypt {
 	public hash;
@@ -23,10 +25,8 @@ export default class ucrypt {
 		this.hash = new hash(this.options.hash);
 		this.file = new file(this.options.file);
 		this.mfa = new mfa(this.options.mfa);
-		this.jwt = "";
-		// this.jwt = new jwt(this.options.jwt);
-		this.rsa = "";
-		// this.rsa = new rsa(this.options.rsa);
+		this.rsa = new rsa(this.options.rsa);
+		this.jwt = new jwt(this.options.jwt);
 	}
 }
 
