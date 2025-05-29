@@ -10,10 +10,10 @@ export default class mfa {
 
 	public generateSecret(length: number): ReturnType<string> {
 		try {
-			const randomBytes = new Uint32Array(length);
+			const random_bytes = new Uint32Array(length);
 			// @ts-expect-error this is correct?
-			crypto.getRandomValues(randomBytes);
-			return ReturnTrue(b32.btoa32(Buffer.from(randomBytes.buffer)));
+			crypto.getRandomValues(random_bytes);
+			return ReturnTrue(b32.btoa32(Buffer.from(random_bytes.buffer)));
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
@@ -31,7 +31,7 @@ export default class mfa {
 				b32.a32tob(secret),
 				{
 					name: "HMAC",
-					hash: { name: this.options.algorithm }
+					hash: { name: this.options.hash_algorithm }
 				},
 				false,
 				["sign"]

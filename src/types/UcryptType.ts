@@ -9,24 +9,27 @@ export interface UcryptType {
 	jwt: {
 		algorithm: "HS256" | "HS512" | "RS256";
 		hash: SupportedCryptoAlgorithms;
-		expiresAfter: string;
+		expires_after: string;
 	};
 	rsa: {
-		keySize: number;
-		genParams: RsaHashedKeyGenParams;
+		key_size: number;
+		gen_params: RsaHashedKeyGenParams;
 	};
 	mfa: {
-		algorithm: SupportedCryptoAlgorithms;
+		hash_algorithm: SupportedCryptoAlgorithms;
+		// Code length and duration
 		digits: number;
 		period: number;
 	};
 	file: {
+		// Compression
 		format: CompressionFormat;
-		chunkSize: number;
+		chunk_size: number;
 
+		// Encryption
 		algorithm: SupportedCryptoAlgorithms;
-		ivLength: number;
-		tagLength: number;
+		iv_length: number;
+		tag_length: number;
 	};
 }
 

@@ -9,19 +9,19 @@ export const defaults: UcryptType = {
 	jwt: {
 		algorithm: "HS256",
 		hash: "sha256",
-		expiresAfter: "1h"
+		expires_after: "1h"
 	},
 	rsa: {
-		genParams: {
+		gen_params: {
 			name: "RSA-OAEP",
 			hash: { name: "SHA-256" },
 			modulusLength: 2048,
 			publicExponent: new Uint8Array([1, 0, 1])
 		},
-		keySize: 2048
+		key_size: 2048
 	},
 	mfa: {
-		algorithm: "sha1",
+		hash_algorithm: "sha1",
 		digits: 6,
 		period: 30
 	},
@@ -29,8 +29,8 @@ export const defaults: UcryptType = {
 		format: "gzip",
 
 		algorithm: "sha256",
-		chunkSize: 1024 * 1024,
-		ivLength: 12,
-		tagLength: 16
+		chunk_size: 1024 * 1024,
+		iv_length: 12,
+		tag_length: 16
 	}
 };
