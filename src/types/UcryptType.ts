@@ -28,8 +28,9 @@ export interface UcryptType {
 
 		// Encryption
 		algorithm: SupportedCryptoAlgorithms;
+		salt_length: number;
 		iv_length: number;
-		tag_length: number;
+		modulus_length: number;
 	};
 }
 

@@ -27,10 +27,11 @@ export const defaults: UcryptType = {
 	},
 	file: {
 		format: "gzip",
+		chunk_size: 1024 * 1024,
 
 		algorithm: "sha256",
-		chunk_size: 1024 * 1024,
-		iv_length: 12,
-		tag_length: 16
+		salt_length: 16,
+		modulus_length: 2048,
+		iv_length: 12
 	}
 };

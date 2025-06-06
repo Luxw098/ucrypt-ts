@@ -1,4 +1,3 @@
-import { cryptoTranslator as crypto } from "../translations/CryptoTranslator";
 import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
 import { UcryptType } from "../types/UcryptType";
 export default class rsa {
@@ -9,14 +8,13 @@ export default class rsa {
 
 	public async generateKeyPair(
 		extractable: boolean,
-		usages: KeyUsage[]
-	): Promise<ReturnType<CryptoKeyPair>> {
+		usages: KeyUsage[],
+		gen_params_override: Partial<RsaHashedKeyGenParams | EcKeyGenParams> = {}
+	): Promise<ReturnType<CryptoKeyPair | CryptoKey>> {
 		try {
-			const key_pair = await crypto.subtle.generateKey(
-				this.options.gen_params,
-				extractable,
-				usages
-			);
+			const gen_params = this.options.gen_params;
+			Object.assign(gen_params, gen_params_override);
+			const key_pair = await crypto.subtle.generateKey(gen_params, extractable, usages);
 
 			return ReturnTrue(key_pair);
 		} catch (err) {
