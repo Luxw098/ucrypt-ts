@@ -3,7 +3,7 @@ import { defaults } from "../src/defaults";
 import ucrypt from "../src";
 import { JWTPayloadType } from "../src/types/JWTPayloadType";
 
-const uc = new ucrypt(defaults);
+const uc = new ucrypt();
 
 const time = Math.floor(Date.now() / 1000);
 const secret = crypto.randomUUID();

@@ -1,10 +1,9 @@
 import { expect, test } from "bun:test";
-import { defaults } from "../../src/defaults";
-import ucrypt from "../../src";
 import { JWTPayloadType } from "../../src/types/JWTPayloadType";
 import rsa_key from "../../src/class/rsa_key";
+import ucrypt from "../../src";
 
-const uc = new ucrypt(defaults);
+const uc = new ucrypt();
 
 const time = Math.floor(Date.now() / 1000);
 const secret = crypto.randomUUID();

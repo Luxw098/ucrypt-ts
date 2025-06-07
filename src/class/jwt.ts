@@ -45,7 +45,7 @@ export default class jwt {
 		}
 	}
 
-	public async verify(token: string, secret: string) {
+	public async verify(token: string, secret: string): Promise<ReturnType<boolean>> {
 		try {
 			const parts = token.split(".");
 			if (parts.length !== 3) return ReturnFalse(new Error("Invalid JWT format"));

@@ -7,16 +7,6 @@ export default class mfa {
 		this.options = options;
 	}
 
-	public generateSecret(length: number): ReturnType<string> {
-		try {
-			const random_bytes = new Uint32Array(length);
-			crypto.getRandomValues(random_bytes);
-			return ReturnTrue(b32.btoa32(Buffer.from(random_bytes.buffer)));
-		} catch (err) {
-			return ReturnFalse(err as Error);
-		}
-	}
-
 	public async generateTOTP(secret: string, interval = 0): Promise<ReturnType<string>> {
 		try {
 			const counter = Math.floor(Date.now() / 1000 / this.options.period) - interval;
