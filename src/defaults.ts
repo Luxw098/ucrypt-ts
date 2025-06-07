@@ -18,7 +18,8 @@ export const defaults: UcryptType = {
 			modulusLength: 2048,
 			publicExponent: new Uint8Array([1, 0, 1])
 		},
-		key_size: 2048
+		key_size: 2048,
+		key_rotation: -1 // -1 means no rotation
 	},
 	mfa: {
 		hash_algorithm: "sha1",

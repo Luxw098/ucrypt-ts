@@ -14,6 +14,7 @@ export interface UcryptType {
 	rsa: {
 		key_size: number;
 		gen_params: RsaHashedKeyGenParams;
+		key_rotation: number;
 	};
 	mfa: {
 		hash_algorithm: SupportedCryptoAlgorithms;

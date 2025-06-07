@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import { defaults } from "../../src/defaults";
 import ucrypt from "../../src";
 import { JWTPayloadType } from "../../src/types/JWTPayloadType";
+import rsa_key from "../../src/class/rsa_key";
 
 const uc = new ucrypt(defaults);
 
@@ -23,18 +24,14 @@ const payload: JWTPayloadType = {
 
 test("encryption/jwt/sign&verify", async () => {
 	const jwt = await uc.jwt.sign(payload, secret);
-	const key_pair = await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]);
-	const encrypted_jwt = await uc.rsa.encrypt(
-		jwt.data,
-		(key_pair.data as CryptoKeyPair).publicKey
-	);
+
+	const rsa_key = (await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]))
+		.data as rsa_key;
+	const encrypted_jwt = await rsa_key.encrypt(jwt.data as string);
 	expect(encrypted_jwt.status).toBe(true);
 	expect(encrypted_jwt.data).toBeTypeOf("string");
 
-	const decrypted_jwt = await uc.rsa.decrypt(
-		encrypted_jwt.data as string,
-		(key_pair.data as CryptoKeyPair).privateKey
-	);
+	const decrypted_jwt = await rsa_key.decrypt(encrypted_jwt.data as string);
 	expect(decrypted_jwt.status).toBe(true);
 	expect(decrypted_jwt.data).toBeTypeOf("string");
 

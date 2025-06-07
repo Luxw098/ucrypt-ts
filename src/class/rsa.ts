@@ -1,5 +1,7 @@
 import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
 import { UcryptType } from "../types/UcryptType";
+import rsa_key from "./rsa_key";
+
 export default class rsa {
 	public options: UcryptType["rsa"];
 	public constructor(options: UcryptType["rsa"]) {
@@ -10,61 +12,20 @@ export default class rsa {
 		extractable: boolean,
 		usages: KeyUsage[],
 		gen_params_override: Partial<RsaHashedKeyGenParams | EcKeyGenParams> = {}
-	): Promise<ReturnType<CryptoKeyPair | CryptoKey>> {
+	): Promise<ReturnType<rsa_key>> {
 		try {
 			const gen_params = this.options.gen_params;
 			Object.assign(gen_params, gen_params_override);
 			const key_pair = await crypto.subtle.generateKey(gen_params, extractable, usages);
 
-			return ReturnTrue(key_pair);
+			const keypair = new rsa_key(this, [gen_params, extractable, usages], key_pair);
+
+			return ReturnTrue(keypair);
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
 	}
 
-	public async encrypt(data: unknown, publicKey: CryptoKey): Promise<ReturnType<string>> {
-		try {
-			const encrypted_data: string[] = [];
-			const chunks = JSON.stringify(data).match(/[\s\S]{1,110}/g);
-			if (!chunks) return ReturnFalse(new Error("Data is too large to encrypt"));
-			for (const chunk of chunks) {
-				const encrypted_chunk = await crypto.subtle.encrypt(
-					this.options.gen_params.name,
-					publicKey,
-					new TextEncoder().encode(chunk)
-				);
-
-				encrypted_data.push(Buffer.from(encrypted_chunk).toString("base64"));
-			}
-
-			return ReturnTrue(encrypted_data.join("|"));
-		} catch (err) {
-			return ReturnFalse(err as Error);
-		}
-	}
-
-	public async decrypt(data: string, privateKey: CryptoKey): Promise<ReturnType<string>> {
-		try {
-			const decrypted_data = [];
-			const decoder = new TextDecoder();
-			const chunks = data.split("|");
-			for (const chunk of chunks) {
-				const decoded_chunk = Buffer.from(chunk, "base64");
-				const decrypted_chunk = await crypto.subtle.decrypt(
-					this.options.gen_params.name,
-					privateKey,
-					decoded_chunk
-				);
-
-				decrypted_data.push(decoder.decode(decrypted_chunk));
-			}
-			return ReturnTrue(JSON.parse(decrypted_data.join("")));
-		} catch (err) {
-			return ReturnFalse(err as Error);
-		}
-	}
-
-	// TODO: Rotate keypair for ID with previous keypair storage
 	// Create one-to-one Diffie-Hellman key exchange between two users
 	// Create Tree-based group Diffie-Hellman key exchange between a group
 }
