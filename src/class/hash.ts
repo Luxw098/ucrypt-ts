@@ -8,11 +8,14 @@ export default class hash {
 	}
 	public async digest(data: string): Promise<ReturnType<string>> {
 		try {
-			const hash = await crypto.subtle.digest(
+			const buffer = await crypto.subtle.digest(
 				this.options.algorithm,
 				new TextEncoder().encode(data)
 			);
-			return ReturnTrue(new Uint8Array(hash).toString());
+			const hash = Array.from(new Uint8Array(buffer))
+				.map(b => b.toString(16).padStart(2, "0"))
+				.join("");
+			return ReturnTrue(hash);
 		} catch {
 			return ReturnFalse(new Error("Failed to create hash"));
 		}

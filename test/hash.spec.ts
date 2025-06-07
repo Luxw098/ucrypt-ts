@@ -2,7 +2,7 @@ import { expect, test } from "bun:test";
 import { defaults } from "../src/defaults";
 import ucrypt from "../src/index";
 
-const uc = new ucrypt(defaults);
+const uc = new ucrypt();
 
 // test("name", () => {
 //     expect("name").toBe("name");

@@ -1,15 +1,14 @@
 import { expect, test } from "bun:test";
-import { defaults } from "../../src/defaults";
 import ucrypt from "../../src";
 
-const uc = new ucrypt(defaults);
+const uc = new ucrypt();
 
 // test("name", () => {
 //     expect("name").toBe("name");
 // });
 
 test("encryption/mfa/generate&verifyTOTP", async () => {
-	const secret = uc.mfa.generateSecret(20);
+	const secret = uc.generateSecret(20);
 	expect(secret.status).toBeTrue();
 	expect(secret.data).toBeTypeOf("string");
 

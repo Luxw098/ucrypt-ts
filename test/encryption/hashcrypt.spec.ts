@@ -1,9 +1,8 @@
 import { expect, test } from "bun:test";
-import { defaults } from "../../src/defaults";
 import ucrypt from "../../src";
 import rsa_key from "../../src/class/rsa_key";
 
-const uc = new ucrypt(defaults);
+const uc = new ucrypt();
 const payload = "Hello, World!";
 
 // test("name", () => {

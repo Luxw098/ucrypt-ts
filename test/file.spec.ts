@@ -4,7 +4,7 @@ import ucrypt from "../src/index";
 
 import fs from "fs";
 
-const uc = new ucrypt(defaults);
+const uc = new ucrypt();
 const test_file_path = "./test/temp-test-file.txt";
 const test_file_data = {
 	username: "admin",

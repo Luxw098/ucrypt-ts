@@ -2,21 +2,21 @@ import { expect, test } from "bun:test";
 import { defaults } from "../src/defaults";
 import ucrypt from "../src";
 
-const uc = new ucrypt(defaults);
+const uc = new ucrypt();
 
 // test("name", () => {
 //     expect("name").toBe("name");
 // });
 
 test("mfa/generateSecret", () => {
-	const secret = uc.mfa.generateSecret(20);
+	const secret = uc.generateSecret(20);
 
 	expect(secret.status).toBe(true);
 	expect(secret.data).toBeTypeOf("string");
 });
 
 test("mfa/generateTOTP", async () => {
-	const secret = uc.mfa.generateSecret(20);
+	const secret = uc.generateSecret(20);
 	const code = await uc.mfa.generateTOTP(secret.data as string);
 
 	expect(code.status).toBe(true);
@@ -25,7 +25,7 @@ test("mfa/generateTOTP", async () => {
 });
 
 test("mfa/verifyTOTP", async () => {
-	const secret = uc.mfa.generateSecret(20);
+	const secret = uc.generateSecret(20);
 	const code = await uc.mfa.generateTOTP(secret.data as string);
 	const verify = await uc.mfa.verifyTOTP(code.data as string, secret.data as string);
 

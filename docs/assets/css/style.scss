@@ -1,0 +1,33 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+:root {
+    --h: #6060C0
+}
+h1 {
+    font-weight: bold !important;
+    color: var(--h);
+}
+h2, h3 {
+    font-style: italic;
+    color: var(--h);
+}
+
+blockquote {
+    font-style: normal;
+    border-left: 4px solid var(--h);
+    padding-left: 15px;
+}
+
+.apiref {
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-left: 4px solid var(--h);
+    padding-left: 15px;
+}
+.apiref:hover {
+    color: var(--h);
+    cursor: pointer;
+}
