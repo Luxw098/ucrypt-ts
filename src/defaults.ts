@@ -18,7 +18,8 @@ export const defaults: UcryptType = {
 			modulusLength: 2048,
 			publicExponent: new Uint8Array([1, 0, 1])
 		},
-		key_size: 2048
+		key_size: 2048,
+		key_rotation: -1 // -1 means no rotation
 	},
 	mfa: {
 		hash_algorithm: "sha1",
@@ -27,10 +28,11 @@ export const defaults: UcryptType = {
 	},
 	file: {
 		format: "gzip",
+		chunk_size: 1024 * 1024,
 
 		algorithm: "sha256",
-		chunk_size: 1024 * 1024,
-		iv_length: 12,
-		tag_length: 16
+		salt_length: 16,
+		modulus_length: 2048,
+		iv_length: 12
 	}
 };

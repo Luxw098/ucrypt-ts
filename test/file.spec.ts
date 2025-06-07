@@ -1,7 +1,3 @@
-(() => {
-	throw new Error('Awaiting implementation of "file.ts"');
-})();
-
 import { afterEach, beforeEach, expect, test } from "bun:test";
 import { defaults } from "../src/defaults";
 import ucrypt from "../src/index";
@@ -27,32 +23,38 @@ afterEach(() => {
 //     expect("name").toBe("name");
 // });
 
-test("file/encrypt", () => {
-	const result = uc.file.encrypt(test_file_path, "test-password");
+test("file/encrypt", async () => {
+	const file = fs.readFileSync(test_file_path).buffer;
+	const result = await uc.file.encrypt(file, "test-password");
 
 	expect(result.status).toBe(true);
-	expect(result.data).toBeInstanceOf(Buffer);
+	expect(result.data).toBeInstanceOf(Uint8Array);
 });
 
-test("file/decrypt", () => {
-	uc.file.encrypt(test_file_path, "test-password");
-	const result = uc.file.decrypt(test_file_path, "test-password");
+test("file/decrypt", async () => {
+	const file = fs.readFileSync(test_file_path).buffer;
+	const encrypted_file = await uc.file.encrypt(file, "test-password");
+	const result = await uc.file.decrypt(
+		encrypted_file.data as Uint8Array<ArrayBuffer>,
+		"test-password"
+	);
 	expect(result.status).toBe(true);
-	expect(result.data).toBeInstanceOf(Buffer);
-	expect(JSON.parse(result.data.toString())).toEqual(test_file_data);
+	expect(result.data).toEqual(file);
 });
 
-test("file/compress", () => {
-	const result = uc.file.compress(test_file_path);
+test("file/compress", async () => {
+	const file = fs.readFileSync(test_file_path);
+	const result = await uc.file.compress(file);
 
 	expect(result.status).toBe(true);
-	expect(result.data).toBeInstanceOf(Buffer);
+	expect(result.data).toBeInstanceOf(Uint8Array);
 });
 
-test("file/decompress", () => {
-	uc.file.compress(test_file_path);
-	const result = uc.file.decompress(test_file_path);
+test("file/decompress", async () => {
+	const file = fs.readFileSync(test_file_path);
+	const compressed = await uc.file.compress(file);
+	const result = await uc.file.decompress(compressed.data as Uint8Array<ArrayBuffer>);
 
 	expect(result.status).toBe(true);
-	expect(result.data).toBeInstanceOf(Buffer);
+	expect(result.data).toBeInstanceOf(Uint8Array);
 });

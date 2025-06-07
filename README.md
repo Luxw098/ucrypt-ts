@@ -10,8 +10,8 @@
   - [x] Token Signing
   - [x] Token Verification
 - **File Utilities**
-  - [ ] Encryption/Decryption
-  - [ ] Compression/Decompression
+  - [x] Encryption/Decryption
+  - [x] Compression/Decompression
 - **MFA Implementation**
   - [x] Secrets
   - [x] TOTP Generation
@@ -19,7 +19,7 @@
 - **RSA Tools**
   - [x] Data Encryption/Decryption
   - [x] Static Keys
-  - [ ] Rotating Keys
+  - [x] Rotating Keys
   - [ ] Real-Time Key exchange (Diffie-Hellman over Websockets)
 
 The package is structured to provide a modular and easy-to-use interface for working with these cryptographic features.

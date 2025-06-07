@@ -1,7 +1,6 @@
 import { ReturnFalse, ReturnTrue, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 import { b32 } from "../util/b32";
-import { cryptoTranslator as crypto } from "../translations/CryptoTranslator";
 export default class mfa {
 	private options: UcryptType["mfa"];
 	public constructor(options: UcryptType["mfa"]) {
@@ -11,7 +10,6 @@ export default class mfa {
 	public generateSecret(length: number): ReturnType<string> {
 		try {
 			const random_bytes = new Uint32Array(length);
-			// @ts-expect-error this is correct?
 			crypto.getRandomValues(random_bytes);
 			return ReturnTrue(b32.btoa32(Buffer.from(random_bytes.buffer)));
 		} catch (err) {
