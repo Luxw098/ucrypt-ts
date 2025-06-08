@@ -1,15 +1,16 @@
 ---
-layout: default
+
 ---
 
 
-## **Features**
+## **Overview**
 
-- **Hash Functions** - Secure data hashing with various algorithms
-- **JSON Web Tokens (JWT)** - Token signing and verification
-- **File Utilities** - Encryption, decryption, compression, and decompression
-- **MFA Implementation** - Complete TOTP-based multi-factor authentication
-- **RSA Tools** - Key generation, data encryption/decryption, and key rotation
+- **Hashing** - Secure data hashing with various algorithms
+- **File Handling** - Encryption, decryption, compression, and decompression
+- **Json Web Tokens** - Token signing and verification
+- **MFA** - TOTP-Based code generation and validation,
+- **RSA** - Key generation, encryption/decryption, and key rotation
+- **AES** - Secret exchange, encryption/decryption, and secret rotation
 
 <br>
 ## **Installation**
@@ -307,3 +308,19 @@ console.log("2FA Valid:", jwt_valid);
 
 - All `src/class` Methods must return `Promise<ReturnType<T>>` or `ReturnType<T>`
 - All `src/class`'s must accept a `ucrypt` instance
+
+### **Current Feature Ideas**
+
+- [ ] ・**RSA**
+> - [ ] ・Key exchange
+> - [x] ・Encryption/Decryption
+> - [x] ・Default options
+> - [x] ・Static key
+> - [x] ・Rotating key
+
+- [ ] ・**AES**
+> - [ ] ・Secret exchange
+> - [ ] ・Encrypt/Decrypt
+> - [ ] ・Default options
+> - [ ] ・Static secret
+> - [ ] ・Rotating secret
