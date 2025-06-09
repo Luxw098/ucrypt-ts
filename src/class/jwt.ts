@@ -37,7 +37,7 @@ export default class jwt {
 				encoder.encode(data_to_sign)
 			);
 
-			const encoded_signature = b64.fromArrayBuffer(signature);
+			const encoded_signature = b64.fromArrayBuffer(signature); // BROKEN
 
 			return ReturnTrue(data_to_sign + "." + encoded_signature);
 		} catch (err) {

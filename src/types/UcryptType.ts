@@ -6,6 +6,10 @@ export interface UcryptType {
 		salt: boolean;
 		pepper: boolean;
 	};
+	exchange: {
+		prime_min: number;
+		secret_length: number;
+	},
 	jwt: {
 		algorithm: "HS256" | "HS512" | "RS256";
 		hash: SupportedCryptoAlgorithms;

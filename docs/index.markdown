@@ -382,18 +382,7 @@ console.log("2FA Valid:", jwt_valid);
 
 ### **Current Feature Ideas**
 
-- [ ] ・**RSA**
+- [ ] **Exchange**
 
-> - [ ] ・Key exchange
-> - [x] ・Encryption/Decryption
-> - [x] ・Default options
-> - [x] ・Static key
-> - [x] ・Rotating key
-
-- [ ] ・**AES**
-
-> - [ ] ・Secret exchange
-> - [x] ・Encrypt/Decrypt
-> - [x] ・Default options
-> - [x] ・Static secret
-> - [x] ・Rotating secret
+> - [x] Diffie–Hellman exchange
+> - [ ] Group key Exchange

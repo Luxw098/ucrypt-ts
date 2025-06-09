@@ -6,6 +6,10 @@ export const defaults: UcryptType = {
 		salt: true,
 		pepper: false
 	},
+	exchange: {
+		prime_min: 594 * 237 * 567 * 234,
+		secret_length: 256
+	},
 	jwt: {
 		algorithm: "HS256",
 		hash: "sha256",

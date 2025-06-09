@@ -10,14 +10,16 @@ import jwt from "./class/jwt";
 import { ReturnFalse, ReturnTrue, ReturnType } from "./types/ReturnType";
 import { b32 } from "./util/b32";
 import aes from "./class/aes";
+import exchange from "./class/exchange";
 
 export default class ucrypt {
-	public hash;
-	public jwt;
-	public rsa;
-	public aes;
-	public file;
-	public mfa;
+	public hash: hash;
+	public exchange: exchange;
+	public jwt: jwt;
+	public rsa: rsa;
+	public aes: aes;
+	public file: file;
+	public mfa: mfa;
 
 	private options: UcryptType;
 	public constructor(options: Partial<typeof this.options> = {}) {
@@ -27,6 +29,7 @@ export default class ucrypt {
 		};
 
 		this.hash = new hash(this.options.hash);
+		this.exchange = new exchange(this.options.exchange);
 		this.jwt = new jwt(this.options.jwt);
 		this.rsa = new rsa(this.options.rsa);
 		this.aes = new aes(this.options.aes);

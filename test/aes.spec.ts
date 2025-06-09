@@ -43,7 +43,6 @@ test("aes/rotating_keys", async () => {
 	const encrypted_data = await aes_key.encrypt(buffer);
 
 	const original_key = aes_key.keys.c;
-	console.log("ORG: ", original_key);
 	aes_key.rotate();
 
 	expect(aes_key.keys.c).not.toBe(original_key);
@@ -51,7 +50,6 @@ test("aes/rotating_keys", async () => {
 
 	expect(aes_key.keys.c).not.toBe(original_key);
 	expect(aes_key.keys.p).toBe(original_key);
-	console.log("KEY: ", aes_key.keys.p);
 
 	const decrypted_data = await aes_key.decrypt(
 		encrypted_data.data as Uint8Array<ArrayBuffer>
