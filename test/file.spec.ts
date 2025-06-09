@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { defaults } from "../src/defaults";
 import ucrypt from "../src/index";
 
 import fs from "fs";

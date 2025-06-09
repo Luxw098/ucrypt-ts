@@ -19,7 +19,18 @@ export const defaults: UcryptType = {
 			publicExponent: new Uint8Array([1, 0, 1])
 		},
 		key_size: 2048,
-		key_rotation: -1 // -1 means no rotation
+		key_rotation: 60,
+		rotation_cooldown: 3
+	},
+	aes: {
+		hash_algorithm: "sha256",
+		salt_length: 16,
+		iv_length: 12,
+		algorithm: "AES-GCM",
+		padding: "PBKDF2",
+		key_length: 256,
+		key_rotation: 60,
+		rotation_cooldown: 3
 	},
 	mfa: {
 		hash_algorithm: "sha1",
@@ -30,9 +41,8 @@ export const defaults: UcryptType = {
 		format: "gzip",
 		chunk_size: 1024 * 1024,
 
-		algorithm: "sha256",
+		hash_algorithm: "sha256",
 		salt_length: 16,
-		modulus_length: 2048,
 		iv_length: 12
 	}
 };

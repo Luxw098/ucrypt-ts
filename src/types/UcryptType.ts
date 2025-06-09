@@ -15,6 +15,17 @@ export interface UcryptType {
 		key_size: number;
 		gen_params: RsaHashedKeyGenParams;
 		key_rotation: number;
+		rotation_cooldown: number;
+	};
+	aes: {
+		hash_algorithm: SupportedCryptoAlgorithms;
+		salt_length: number;
+		iv_length: number;
+		algorithm: string;
+		padding: string;
+		key_length: number;
+		key_rotation: number;
+		rotation_cooldown: number;
 	};
 	mfa: {
 		hash_algorithm: SupportedCryptoAlgorithms;
@@ -28,10 +39,9 @@ export interface UcryptType {
 		chunk_size: number;
 
 		// Encryption
-		algorithm: SupportedCryptoAlgorithms;
+		hash_algorithm: SupportedCryptoAlgorithms;
 		salt_length: number;
 		iv_length: number;
-		modulus_length: number;
 	};
 }
 

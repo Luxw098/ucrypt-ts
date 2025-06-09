@@ -320,7 +320,7 @@ console.log("2FA Valid:", jwt_valid);
 
 - [ ] ・**AES**
 > - [ ] ・Secret exchange
-> - [ ] ・Encrypt/Decrypt
-> - [ ] ・Default options
-> - [ ] ・Static secret
-> - [ ] ・Rotating secret
+> - [x] ・Encrypt/Decrypt
+> - [x] ・Default options
+> - [x] ・Static secret
+> - [x] ・Rotating secret
