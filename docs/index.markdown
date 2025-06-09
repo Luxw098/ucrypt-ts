@@ -13,6 +13,7 @@
 - **AES** - Secret exchange, encryption/decryption, and secret rotation
 
 <br>
+
 ## **Installation**
 
 ```shell
@@ -35,7 +36,9 @@ const crypt = new ucrypt({
 });
 ```
 
-### **Examples**
+<br>
+
+## **Examples**
 
 ---
 
@@ -68,6 +71,7 @@ console.log("2FA Valid:", jwt_valid);
 ```
 
 <br>
+
 ## **API Reference**
 
 <details>
@@ -234,12 +238,12 @@ console.log("2FA Valid:", jwt_valid);
 > - `gen_params_override?` ( *Partial<RsaHashedKeyGenParams | EcKeyGenParams>* ): Override for key generation parameters.
 > 
 > **Returns:**  
-> - `key_pair` ( *rsa_key* ): The generated RSA key pair.
+> - `key_pair` ( *RSAKeypair* ): The generated RSA key pair.
 </div>
 </details>
 
 <details>
-<summary><div class="apiref"> ucrypt.rsa_key#encrypt</div></summary>
+<summary><div class="apiref"> ucrypt.RSAKeypair#encrypt</div></summary>
 
 <div markdown="1"> 
 > <br>
@@ -255,7 +259,7 @@ console.log("2FA Valid:", jwt_valid);
 </details>
 
 <details>
-<summary><div class="apiref"> ucrypt.rsa_key#decrypt</div></summary>
+<summary><div class="apiref"> ucrypt.RSAKeypair#decrypt</div></summary>
 
 <div markdown="1"> 
 > <br>
@@ -271,7 +275,7 @@ console.log("2FA Valid:", jwt_valid);
 </details>
 
 <details>
-<summary><div class="apiref"> ucrypt.rsa_key#rotate</div></summary>
+<summary><div class="apiref"> ucrypt.RSAKeypair#rotate</div></summary>
 
 <div markdown="1"> 
 > <br>
@@ -285,10 +289,77 @@ console.log("2FA Valid:", jwt_valid);
 </div>
 </details>
 
+<br>
+<details>
+<summary><div class="apiref"> ucrypt.aes#generateKeyPair</div></summary>
+
+<div markdown="1"> 
+> <br>
+> **Description:** Generate an AES key pair for encryption/decryption.
+> 
+> **Parameters:**
+> None
+> 
+> **Returns:**  
+> - `key_pair` ( *AESKeypair* ): The generated AES key pair.
+</div>
+</details>
+
+<details>
+<summary><div class="apiref"> ucrypt.AESKeypair#encrypt</div></summary>
+
+<div markdown="1"> 
+> <br>
+> **Description:** Encrypt data using AES encryption.
+> 
+> **Parameters:**
+> - `file` ( *ArrayBuffer* ): The data to encrypt.
+> - `key_override?` ( *string* ): Optional override for stored encryption key.
+> - `options?` ( *Record<string, unknown>* ): Optional encryption options.
+> 
+> **Returns:**  
+> - `encrypted_data` ( *Uint8Array* ): The resulting encrypted data.
+</div>
+</details>
+
+<details>
+<summary><div class="apiref"> ucrypt.AESKeypair#decrypt</div></summary>
+
+<div markdown="1"> 
+> <br>
+> **Description:** Decrypt data using AES decryption.
+> 
+> **Parameters:**
+> - `file` ( *Uint8Array* ): The encrypted data to decrypt.
+> - `key_override?` ( *string* ): Optional override for stored decryption key.
+> - `options?` ( *Record<string, unknown>* ): Optional decryption options.
+> 
+> **Returns:**  
+> - `decrypted_data` ( *ArrayBuffer* ): The resulting decrypted data.
+</div>
+</details>
+
+<details>
+<summary><div class="apiref"> ucrypt.AESKeypair#rotate</div></summary>
+
+<div markdown="1"> 
+> <br>
+> **Description:** Rotate the AES keys by generating a new key and preserving the old one.
+> 
+> **Parameters:**
+> None
+> 
+> **Returns:**  
+> - `new_key` ( *string* ): The newly generated key.
+</div>
+</details>
+
+<br>
 
 
 
 <br>
+
 ## **Contributing**
 
 > Please understand what is listed below somewhat :p
@@ -302,7 +373,7 @@ console.log("2FA Valid:", jwt_valid);
 | Runtime          | Bun                |
 | Test platform    | Bun:test           |
 | Version Control  | Git, Github        |
-| Extra            | ESLint, Prettier   |
+| Linting          | ESLint, Prettier   |
 
 ### **Functional Standards**
 
@@ -312,6 +383,7 @@ console.log("2FA Valid:", jwt_valid);
 ### **Current Feature Ideas**
 
 - [ ] ・**RSA**
+
 > - [ ] ・Key exchange
 > - [x] ・Encryption/Decryption
 > - [x] ・Default options
@@ -319,6 +391,7 @@ console.log("2FA Valid:", jwt_valid);
 > - [x] ・Rotating key
 
 - [ ] ・**AES**
+
 > - [ ] ・Secret exchange
 > - [x] ・Encrypt/Decrypt
 > - [x] ・Default options
