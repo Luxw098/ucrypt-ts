@@ -10,7 +10,8 @@ export default class file {
 	public constructor(options: UcryptType["file"], aes: ReturnType<AESKeypair>) {
 		this.options = options;
 
-		if (!aes.status) throw new Error("AES keypair generation failed: ", aes.data);
+		if (!aes.status)
+			throw new Error("AES keypair generation failed: " + JSON.stringify(aes.data));
 		this.aes = aes.data;
 	}
 

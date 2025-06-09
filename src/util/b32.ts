@@ -8,7 +8,9 @@ export const b32 = {
 		let bits = 0;
 		let value = 0;
 
-		for (const byte of buffer) {
+		for (let i = 0; i < buffer.length; i++) {
+			const byte = buffer.at(i);
+			if (byte === undefined) continue;
 			value = (value << 8) | byte;
 			bits += 8;
 

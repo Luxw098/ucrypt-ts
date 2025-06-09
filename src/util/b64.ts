@@ -1,6 +1,6 @@
 export const b64 = {
 	fromArrayBuffer(buffer: ArrayBuffer) {
-		const binary = String.fromCharCode(...new Uint8Array(buffer));
+		const binary = new TextDecoder().decode(new Uint8Array(buffer));
 		return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 	},
 

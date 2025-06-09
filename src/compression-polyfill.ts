@@ -11,40 +11,42 @@
  * @see https://github.com/oven-sh/bun/issues/1723
  */
 
-if (typeof globalThis.window == "undefined") {
-	const zlib = await import("node:zlib");
+void (async () => {
+	if (typeof globalThis.window == "undefined") {
+		const zlib = await import("node:zlib");
 
-	class CompressionStream {
-		public readable;
-		public writable;
-		public constructor(format: "deflate" | "deflate-raw" | "gzip") {
-			const handle =
-				format === "deflate"
-					? zlib.createDeflate()
-					: format === "gzip"
-						? zlib.createGzip()
-						: zlib.createDeflateRaw();
-			this.readable = new ReadableStream({
-				start(controller) {
-					handle.on("data", chunk => {
-						controller.enqueue(chunk);
-					});
-					handle.once("end", () => {
-						controller.close();
-					});
-				}
-			});
-			this.writable = new WritableStream({
-				write: chunk => {
-					handle.write(chunk);
-				},
-				close: () => {
-					handle.end();
-				}
-			});
+		class CompressionStream {
+			public readable;
+			public writable;
+			public constructor(format: "deflate" | "deflate-raw" | "gzip") {
+				const handle =
+					format === "deflate"
+						? zlib.createDeflate()
+						: format === "gzip"
+							? zlib.createGzip()
+							: zlib.createDeflateRaw();
+				this.readable = new ReadableStream({
+					start(controller) {
+						handle.on("data", chunk => {
+							controller.enqueue(chunk);
+						});
+						handle.once("end", () => {
+							controller.close();
+						});
+					}
+				});
+				this.writable = new WritableStream({
+					write: chunk => {
+						handle.write(chunk);
+					},
+					close: () => {
+						handle.end();
+					}
+				});
+			}
 		}
-	}
 
-	globalThis.CompressionStream ??= CompressionStream;
-	globalThis.DecompressionStream ??= CompressionStream;
-}
+		globalThis.CompressionStream ??= CompressionStream;
+		globalThis.DecompressionStream ??= CompressionStream;
+	}
+})();
