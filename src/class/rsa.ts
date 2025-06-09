@@ -1,6 +1,124 @@
 import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
 import { UcryptType } from "../types/UcryptType";
-import rsa_key from "./rsa_key";
+
+class keypair {
+	private lastRotation = Date.now();
+
+	public options: rsa["options"];
+	public keyopts: unknown[];
+	public keys: {
+		p: CryptoKeyPair | null;
+		c: CryptoKeyPair;
+	};
+	// eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/no-unused-vars
+	public exchange_function: (keys: typeof this.keys) => Promise<void> = async _ => {
+		return;
+	};
+
+	public constructor(
+		options: rsa["options"],
+		key_options: unknown[],
+		keypair: CryptoKeyPair
+	) {
+		this.options = options;
+		this.keyopts = key_options;
+		this.keys = {
+			p: null,
+			c: keypair
+		};
+
+		if (this.options.key_rotation != -1) {
+			setInterval(
+				self => {
+					void self.rotate();
+				},
+				options.key_rotation * 60 * 1000,
+				this
+			);
+		}
+	}
+
+	public async rotate(): Promise<ReturnType<typeof this.keys.c>> {
+		try {
+			if (Date.now() - this.lastRotation > this.options.rotation_cooldown * 60 * 1000)
+				throw new Error("Rotation cooldown not met");
+
+			const result = await crypto.subtle.generateKey(
+				this.keyopts[0] as RsaHashedKeyGenParams | EcKeyGenParams,
+				this.keyopts[1] as boolean,
+				this.keyopts[2] as KeyUsage[]
+			);
+			this.keys.p = this.keys.c;
+			this.keys.c = result;
+
+			this.lastRotation = Date.now();
+
+			return ReturnTrue(result);
+		} catch (err) {
+			return ReturnFalse(err as Error);
+		}
+	}
+
+	public async encrypt(
+		data: unknown,
+		publicKey?: CryptoKey
+	): Promise<ReturnType<string>> {
+		const key = publicKey ?? this.keys.c.publicKey;
+		try {
+			const encrypted_data: string[] = [];
+			const chunks = JSON.stringify(data).match(/[\s\S]{1,110}/g);
+			if (!chunks) return ReturnFalse(new Error("Data is too large to encrypt"));
+			for (const chunk of chunks) {
+				const encrypted_chunk = await crypto.subtle.encrypt(
+					this.options.gen_params,
+					key,
+					new TextEncoder().encode(chunk)
+				);
+
+				encrypted_data.push(Buffer.from(encrypted_chunk).toString("base64"));
+			}
+
+			return ReturnTrue(encrypted_data.join("|"));
+		} catch (err) {
+			if (!this.keys.p || key == this.keys.p.publicKey) return ReturnFalse(err as Error);
+
+			const previous_key = await this.encrypt(data, this.keys.p.publicKey);
+			if (previous_key.status) return ReturnTrue(previous_key);
+			else return ReturnFalse(err as Error);
+		}
+	}
+
+	public async decrypt(
+		data: string,
+		privateKey?: CryptoKey
+	): Promise<ReturnType<string>> {
+		const key = privateKey ?? this.keys.c.privateKey;
+		try {
+			const decrypted_data = [];
+			const decoder = new TextDecoder();
+			const chunks = data.split("|");
+			for (const chunk of chunks) {
+				const decoded_chunk = Buffer.from(chunk, "base64");
+				const decrypted_chunk = await crypto.subtle.decrypt(
+					this.options.gen_params,
+					key,
+					decoded_chunk
+				);
+
+				decrypted_data.push(decoder.decode(decrypted_chunk));
+			}
+
+			return ReturnTrue(JSON.parse(decrypted_data.join("")));
+		} catch (err) {
+			if (!this.keys.p || key == this.keys.p.privateKey) return ReturnFalse(err as Error);
+
+			const previous_key = await this.decrypt(data, this.keys.p.privateKey);
+			if (previous_key.status) return ReturnTrue(previous_key.data);
+			else return ReturnFalse(err as Error);
+		}
+	}
+}
+export { keypair as RSAKeypair };
 
 export default class rsa {
 	public options: UcryptType["rsa"];
@@ -12,20 +130,25 @@ export default class rsa {
 		extractable: boolean,
 		usages: KeyUsage[],
 		gen_params_override: Partial<RsaHashedKeyGenParams | EcKeyGenParams> = {}
-	): Promise<ReturnType<rsa_key>> {
+	): Promise<ReturnType<keypair>> {
 		try {
 			const gen_params = this.options.gen_params;
 			Object.assign(gen_params, gen_params_override);
-			const key_pair = await crypto.subtle.generateKey(gen_params, extractable, usages);
+			const crypto_keys = await crypto.subtle.generateKey(
+				gen_params,
+				extractable,
+				usages
+			);
 
-			const keypair = new rsa_key(this, [gen_params, extractable, usages], key_pair);
+			const keys = new keypair(
+				this.options,
+				[gen_params, extractable, usages],
+				crypto_keys
+			);
 
-			return ReturnTrue(keypair);
+			return ReturnTrue(keys);
 		} catch (err) {
 			return ReturnFalse(err as Error);
 		}
 	}
-
-	// Create one-to-one Diffie-Hellman key exchange between two users
-	// Create Tree-based group Diffie-Hellman key exchange between a group
 }

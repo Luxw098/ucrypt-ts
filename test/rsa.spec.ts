@@ -1,7 +1,6 @@
 import { expect, test } from "bun:test";
-import { defaults } from "../src/defaults";
+import { RSAKeypair } from "../src/class/rsa";
 import ucrypt from "../src";
-import rsa_key from "../src/class/rsa_key";
 
 const uc = new ucrypt();
 
@@ -12,12 +11,12 @@ const uc = new ucrypt();
 test("rsa/generateKeyPair", async () => {
 	const key_pair = await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]);
 	expect(key_pair.status).toBe(true);
-	expect(key_pair.data).toBeInstanceOf(rsa_key);
+	expect(key_pair.data).toBeInstanceOf(RSAKeypair);
 });
 
 test("rsa/encrypt", async () => {
 	const rsa_key = (await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]))
-		.data as rsa_key;
+		.data as RSAKeypair;
 
 	const encrypted_data = await rsa_key.encrypt("Hello, RSA!");
 	expect(encrypted_data.status).toBe(true);
@@ -26,7 +25,7 @@ test("rsa/encrypt", async () => {
 
 test("rsa/decrypt", async () => {
 	const rsa_key = (await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]))
-		.data as rsa_key;
+		.data as RSAKeypair;
 
 	const encrypted_data = await rsa_key.encrypt("Hello, RSA!");
 
@@ -36,15 +35,20 @@ test("rsa/decrypt", async () => {
 });
 test("rsa/rotating_keys", async () => {
 	const rsa_key = (await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]))
-		.data as rsa_key;
+		.data as RSAKeypair;
 
 	const encrypted_data = await rsa_key.encrypt("Hello, RSA!");
 
-	const originalPublicKey = rsa_key.keys.c.publicKey;
+	const original_public = rsa_key.keys.c.publicKey;
+	const original_private = rsa_key.keys.c.privateKey;
+
 	await rsa_key.rotate();
 
-	expect(rsa_key.keys.c.publicKey).not.toBe(originalPublicKey);
-	expect(rsa_key.keys.p!.publicKey).toBe(originalPublicKey);
+	expect(rsa_key.keys.c.publicKey).not.toBe(original_public);
+	expect(rsa_key.keys.p!.publicKey).toBe(original_public);
+
+	expect(rsa_key.keys.c.privateKey).not.toBe(original_private);
+	expect(rsa_key.keys.p!.privateKey).toBe(original_private);
 
 	const decrypted_data = await rsa_key.decrypt(encrypted_data.data as string);
 	expect(decrypted_data.status).toBe(true);

@@ -2,98 +2,25 @@ import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
 import "../compression-polyfill";
+import { AESKeypair } from "./aes";
 
 export default class file {
 	private options: UcryptType["file"];
-	public constructor(options: UcryptType["file"]) {
+	private aes: AESKeypair;
+	public constructor(options: UcryptType["file"], aes: ReturnType<AESKeypair>) {
 		this.options = options;
+
+		if (!aes.status)
+			throw new Error("AES keypair generation failed: " + JSON.stringify(aes.data));
+		this.aes = aes.data;
 	}
 
 	public async encrypt(file: ArrayBuffer, key: string): Promise<ReturnType<Uint8Array>> {
-		try {
-			const keyMaterial = await crypto.subtle.importKey(
-				"raw",
-				new TextEncoder().encode(key),
-				{ name: "PBKDF2" },
-				false,
-				["deriveKey"]
-			);
-
-			const salt = crypto.getRandomValues(new Uint8Array(this.options.salt_length));
-			const cryptoKey = await crypto.subtle.deriveKey(
-				{
-					name: "PBKDF2",
-					salt: salt,
-					iterations: 100000,
-					hash: this.options.algorithm
-				},
-				keyMaterial,
-				{ name: "AES-GCM", length: 256 },
-				false,
-				["encrypt"]
-			);
-
-			const iv = crypto.getRandomValues(new Uint8Array(this.options.iv_length));
-
-			const encrypted = await crypto.subtle.encrypt(
-				{ name: "AES-GCM", iv: iv },
-				cryptoKey,
-				file
-			);
-
-			const result = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
-			result.set(salt, 0);
-			result.set(iv, salt.length);
-			result.set(new Uint8Array(encrypted), salt.length + iv.length);
-
-			return ReturnTrue(result);
-		} catch (error) {
-			return ReturnFalse(error as Error);
-		}
+		return this.aes.encrypt(file, key, this.options);
 	}
 
 	public async decrypt(file: Uint8Array, key: string): Promise<ReturnType<ArrayBuffer>> {
-		try {
-			const keyMaterial = await crypto.subtle.importKey(
-				"raw",
-				new TextEncoder().encode(key),
-				{ name: "PBKDF2" },
-				false,
-				["deriveKey"]
-			);
-
-			const salt_length = this.options.salt_length;
-			const iv_length = this.options.iv_length;
-
-			const [salt, iv, data] = [
-				file.slice(0, salt_length),
-				file.slice(salt_length, salt_length + iv_length),
-				file.slice(salt_length + iv_length)
-			];
-
-			const derived_key = await crypto.subtle.deriveKey(
-				{
-					name: "PBKDF2",
-					salt: salt,
-					iterations: 100000,
-					hash: this.options.algorithm
-				},
-				keyMaterial,
-				{ name: "AES-GCM", length: 256 },
-				false,
-				["decrypt"]
-			);
-
-			const decrypted = await crypto.subtle.decrypt(
-				{ name: "AES-GCM", iv: iv },
-				derived_key,
-				data
-			);
-
-			return ReturnTrue(decrypted);
-		} catch (error) {
-			return ReturnFalse(error as Error);
-		}
+		return this.aes.decrypt(file, key, this.options);
 	}
 
 	public async compress(file: Uint8Array): Promise<ReturnType<Uint8Array>> {

@@ -3,9 +3,11 @@
 
 @import "{{ site.theme }}";
 
+
 :root {
     --h: #6060C0
 }
+
 h1 {
     font-weight: bold !important;
     color: var(--h);

@@ -9,26 +9,29 @@ import rsa from "./class/rsa";
 import jwt from "./class/jwt";
 import { ReturnFalse, ReturnTrue, ReturnType } from "./types/ReturnType";
 import { b32 } from "./util/b32";
+import aes from "./class/aes";
 
 export default class ucrypt {
 	public hash;
-	public file;
 	public jwt;
 	public rsa;
+	public aes;
+	public file;
 	public mfa;
 
 	private options: UcryptType;
-	public constructor(options: typeof this.options = {}) {
+	public constructor(options: Partial<typeof this.options> = {}) {
 		this.options = {
 			...defaults,
 			...options
 		};
 
 		this.hash = new hash(this.options.hash);
-		this.file = new file(this.options.file);
-		this.mfa = new mfa(this.options.mfa);
-		this.rsa = new rsa(this.options.rsa);
 		this.jwt = new jwt(this.options.jwt);
+		this.rsa = new rsa(this.options.rsa);
+		this.aes = new aes(this.options.aes);
+		this.file = new file(this.options.file, this.aes.generateKeyPair());
+		this.mfa = new mfa(this.options.mfa);
 	}
 
 	public generateSecret(length: number): ReturnType<string> {

@@ -2,7 +2,8 @@
   // This is based on https://bun.sh/docs/typescript#suggested-compileroptions
   "$schema": "https://json.schemastore.org/tsconfig",
   "docs": "https://bun.sh/docs/typescript",
-
+  "include": ["src"],
+  
   "compilerOptions": {
     // Enable latest features
     "lib": ["ESNext", "DOM"],
@@ -14,8 +15,9 @@
 
     // Bundler mode
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "dist",
     
     // Best practices
     "strict": true,
