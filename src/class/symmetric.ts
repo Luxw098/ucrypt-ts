@@ -1,12 +1,12 @@
-import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
+import { Return, ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
 import "../compression-polyfill";
 
-class keypair {
+class SymmetricKey {
 	private lastRotation = Date.now();
 
-	public options: aes["options"];
+	public options: symmetric["options"];
 	public keys: {
 		p: string | null;
 		c: string;
@@ -16,7 +16,7 @@ class keypair {
 		return;
 	};
 
-	public constructor(options: aes["options"], key: string) {
+	public constructor(options: symmetric["options"], key: string) {
 		this.options = options;
 		this.keys = {
 			p: null,
@@ -46,9 +46,9 @@ class keypair {
 			this.keys.p = this.keys.c;
 			this.keys.c = result;
 
-			return ReturnTrue(result);
+			return Return(true, result);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 
@@ -98,13 +98,13 @@ class keypair {
 			result.set(iv, salt.length);
 			result.set(new Uint8Array(encrypted), salt.length + iv.length);
 
-			return ReturnTrue(result);
+			return Return(true, result);
 		} catch (err) {
-			if (!this.keys.p || key == this.keys.p) return ReturnFalse(err as Error);
+			if (!this.keys.p || key == this.keys.p) return Return(false, err as Error);
 
 			const previous_key = await this.encrypt(file, this.keys.p);
-			if (previous_key.status) return ReturnTrue(previous_key);
-			else return ReturnFalse(err as Error);
+			if (previous_key.status) return Return(true, previous_key.data);
+			else return Return(false, err as Error);
 		}
 	}
 
@@ -156,35 +156,35 @@ class keypair {
 				data
 			);
 
-			return ReturnTrue(decrypted);
+			return Return(true, decrypted);
 		} catch (err) {
-			if (!this.keys.p || key == this.keys.p) return ReturnFalse(err as Error);
+			if (!this.keys.p || key == this.keys.p) return Return(false, err as Error);
 
 			const previous_key = await this.decrypt(file, this.keys.p);
 
-			if (previous_key.status) return ReturnTrue(previous_key.data);
-			else return ReturnFalse(err as Error);
+			if (previous_key.status) return Return(true, previous_key.data);
+			else return Return(false, err as Error);
 		}
 	}
 }
-export { keypair as AESKeypair };
+export { SymmetricKey };
 
-export default class aes {
-	private options: UcryptType["aes"];
-	public constructor(options: UcryptType["aes"]) {
+export default class symmetric {
+	private options: UcryptType["symmetric"];
+	public constructor(options: UcryptType["symmetric"]) {
 		this.options = options;
 	}
 
-	public generateKeyPair(): ReturnType<keypair> {
+	public generateKeyPair(): ReturnType<SymmetricKey> {
 		try {
-			const result = new keypair(
+			const result = new SymmetricKey(
 				this.options,
 				crypto.getRandomValues(new Uint8Array(this.options.key_length)).join("")
 			);
 
-			return ReturnTrue(result);
+			return Return(true, result);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 }

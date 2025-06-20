@@ -9,19 +9,19 @@ export interface UcryptType {
 	exchange: {
 		prime_min: number;
 		secret_length: number;
-	},
+	};
 	jwt: {
 		algorithm: "HS256" | "HS512" | "RS256";
 		hash: SupportedCryptoAlgorithms;
 		expires_after: string;
 	};
-	rsa: {
+	asymmetric: {
 		key_size: number;
 		gen_params: RsaHashedKeyGenParams;
 		key_rotation: number;
 		rotation_cooldown: number;
 	};
-	aes: {
+	symmetric: {
 		hash_algorithm: SupportedCryptoAlgorithms;
 		salt_length: number;
 		iv_length: number;

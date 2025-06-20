@@ -8,16 +8,11 @@ export type ReturnType<T> =
 			data: Error;
 	  };
 
-export function ReturnTrue<T>(data: unknown) {
+export function Return<T>(status: true, data: T): ReturnType<T>;
+export function Return<T>(status: false, error: Error): ReturnType<T>;
+export function Return<T>(status: boolean, result: unknown): ReturnType<T> {
 	return {
-		status: true,
-		data: data
-	} as ReturnType<T>;
-}
-
-export function ReturnFalse<T>(error: Error) {
-	return {
-		status: false,
-		data: error
+		status,
+		data: result
 	} as ReturnType<T>;
 }

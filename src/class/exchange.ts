@@ -1,7 +1,7 @@
 // Create one-to-one Diffie-Hellman key exchange between two users
 // Create Tree-based group Diffie-Hellman key exchange between a group
 
-import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
+import { Return, ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
 import "../compression-polyfill";
@@ -56,7 +56,7 @@ export default class exchange {
 
 			const s = g ** parseInt(a) % p;
 
-			return ReturnTrue([
+			return Return(true, [
 				{
 					p: p,
 					g: g,
@@ -65,7 +65,7 @@ export default class exchange {
 				a
 			]);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 
@@ -82,9 +82,9 @@ export default class exchange {
 			const shared_secret = data.s ** parseInt(b) % data.p;
 
 			callback(s);
-			return ReturnTrue(shared_secret);
+			return Return(true, shared_secret);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 }

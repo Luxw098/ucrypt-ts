@@ -2,7 +2,7 @@
   // This is based on https://bun.sh/docs/typescript#suggested-compileroptions
   "$schema": "https://json.schemastore.org/tsconfig",
   "docs": "https://bun.sh/docs/typescript",
-  "include": ["src"],
+  "include": ["src", "test"],
   
   "compilerOptions": {
     // Enable latest features

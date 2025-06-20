@@ -1,5 +1,4 @@
 import { expect, test } from "bun:test";
-import { defaults } from "../src/defaults";
 import ucrypt from "../src";
 import { JWTPayloadType } from "../src/types/JWTPayloadType";
 

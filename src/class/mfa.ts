@@ -1,4 +1,4 @@
-import { ReturnFalse, ReturnTrue, type ReturnType } from "../types/ReturnType";
+import { Return, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 import { b32 } from "../util/b32";
 export default class mfa {
@@ -36,9 +36,9 @@ export default class mfa {
 
 			const otp = code % Math.pow(10, this.options.digits);
 
-			return ReturnTrue(otp.toString().padStart(this.options.digits, "0"));
+			return Return(true, otp.toString().padStart(this.options.digits, "0"));
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 
@@ -47,14 +47,14 @@ export default class mfa {
 			const generated_code = await this.generateTOTP(secret);
 			const previous_code = await this.generateTOTP(secret, 1);
 			if (!generated_code.status || !previous_code.status)
-				return ReturnFalse(new Error("Failed to generate TOTP codes"));
+				return Return(false, new Error("Failed to generate TOTP codes"));
 
 			if (generated_code.data === code || previous_code.data === code)
-				return ReturnTrue(true);
+				return Return(true, true);
 
-			return ReturnTrue(generated_code.data === code);
+			return Return(true, generated_code.data === code);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 }

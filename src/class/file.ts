@@ -1,26 +1,31 @@
-import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
+import { Return, ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
+import { SymmetricKey } from "./symmetric";
 
 import "../compression-polyfill";
-import { AESKeypair } from "./aes";
 
 export default class file {
 	private options: UcryptType["file"];
-	private aes: AESKeypair;
-	public constructor(options: UcryptType["file"], aes: ReturnType<AESKeypair>) {
+	private symmetricKey: SymmetricKey;
+	public constructor(
+		options: UcryptType["file"],
+		symmetricKey: ReturnType<SymmetricKey>
+	) {
 		this.options = options;
 
-		if (!aes.status)
-			throw new Error("AES keypair generation failed: " + JSON.stringify(aes.data));
-		this.aes = aes.data;
+		if (!symmetricKey.status)
+			throw new Error(
+				"SymmetricKey generation failed: " + JSON.stringify(symmetricKey.data)
+			);
+		this.symmetricKey = symmetricKey.data;
 	}
 
 	public async encrypt(file: ArrayBuffer, key: string): Promise<ReturnType<Uint8Array>> {
-		return this.aes.encrypt(file, key, this.options);
+		return this.symmetricKey.encrypt(file, key, this.options);
 	}
 
 	public async decrypt(file: Uint8Array, key: string): Promise<ReturnType<ArrayBuffer>> {
-		return this.aes.decrypt(file, key, this.options);
+		return this.symmetricKey.decrypt(file, key, this.options);
 	}
 
 	public async compress(file: Uint8Array): Promise<ReturnType<Uint8Array>> {
@@ -52,10 +57,10 @@ export default class file {
 				offset += chunk.length;
 			}
 
-			return ReturnTrue(compressed);
+			return Return(true, compressed);
 		} catch (error) {
 			console.error("Compression error:", error);
-			return ReturnFalse(error as Error);
+			return Return(false, error as Error);
 		}
 	}
 
@@ -86,9 +91,9 @@ export default class file {
 				offset += chunk.length;
 			}
 
-			return ReturnTrue(decompressed);
+			return Return(true, decompressed);
 		} catch (error) {
-			return ReturnFalse(error as Error);
+			return Return(false, error as Error);
 		}
 	}
 

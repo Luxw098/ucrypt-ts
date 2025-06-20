@@ -22,7 +22,8 @@ export default [
 		files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
 		languageOptions: {
 			globals: {
-				...globals.browser
+				...globals.browser,
+				...globals.node
 			},
 			parser: tseslint.parser,
 			parserOptions: {

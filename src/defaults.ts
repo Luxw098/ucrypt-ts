@@ -15,7 +15,7 @@ export const defaults: UcryptType = {
 		hash: "sha256",
 		expires_after: "1h"
 	},
-	rsa: {
+	asymmetric: {
 		gen_params: {
 			name: "RSA-OAEP",
 			hash: { name: "SHA-256" },
@@ -26,7 +26,7 @@ export const defaults: UcryptType = {
 		key_rotation: 60,
 		rotation_cooldown: 3
 	},
-	aes: {
+	symmetric: {
 		hash_algorithm: "sha256",
 		salt_length: 16,
 		iv_length: 12,
