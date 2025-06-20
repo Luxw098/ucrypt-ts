@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { JWTPayloadType } from "../../src/types/JWTPayloadType";
-import rsa_key from "../../src/class/rsa_key";
+import { AsymmetricKeys } from "../../src/class/asymmetric";
 import ucrypt from "../../src";
 
 const uc = new ucrypt();
@@ -24,13 +24,13 @@ const payload: JWTPayloadType = {
 test("encryption/jwt/sign&verify", async () => {
 	const jwt = await uc.jwt.sign(payload, secret);
 
-	const rsa_key = (await uc.rsa.generateKeyPair(true, ["encrypt", "decrypt"]))
-		.data as rsa_key;
-	const encrypted_jwt = await rsa_key.encrypt(jwt.data as string);
+	const keys = (await uc.asymmetric.generateKeyPair(true, ["encrypt", "decrypt"]))
+		.data as AsymmetricKeys;
+	const encrypted_jwt = await keys.encrypt(jwt.data as string);
 	expect(encrypted_jwt.status).toBe(true);
 	expect(encrypted_jwt.data).toBeTypeOf("string");
 
-	const decrypted_jwt = await rsa_key.decrypt(encrypted_jwt.data as string);
+	const decrypted_jwt = await keys.decrypt(encrypted_jwt.data as string);
 	expect(decrypted_jwt.status).toBe(true);
 	expect(decrypted_jwt.data).toBeTypeOf("string");
 

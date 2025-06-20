@@ -1,9 +1,10 @@
 export const b64 = {
 	fromArrayBuffer(buffer: ArrayBuffer) {
-		const binary = new TextDecoder().decode(new Uint8Array(buffer));
+		const bytes = new Uint8Array(buffer);
+		let binary = "";
+		for (const byte of bytes) binary += String.fromCharCode(byte);
 		return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 	},
-
 	toArrayBuffer(base64Url: string) {
 		let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
 		while (base64.length % 4) base64 += "=";

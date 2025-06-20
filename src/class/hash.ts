@@ -1,4 +1,4 @@
-import { ReturnFalse, ReturnTrue, type ReturnType } from "../types/ReturnType";
+import { Return, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
 export default class hash {
@@ -15,9 +15,9 @@ export default class hash {
 			const hash = Array.from(new Uint8Array(buffer))
 				.map(b => b.toString(16).padStart(2, "0"))
 				.join("");
-			return ReturnTrue(hash);
+			return Return(true, hash);
 		} catch {
-			return ReturnFalse(new Error("Failed to create hash"));
+			return Return(false, new Error("Failed to create hash"));
 		}
 	}
 }

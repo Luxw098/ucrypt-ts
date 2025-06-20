@@ -1,10 +1,10 @@
-import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
+import { Return, ReturnType } from "../types/ReturnType";
 import { UcryptType } from "../types/UcryptType";
 
-class keypair {
+class AsymmetricKeys {
 	private lastRotation = Date.now();
 
-	public options: rsa["options"];
+	public options: asymmetric["options"];
 	public keyopts: unknown[];
 	public keys: {
 		p: CryptoKeyPair | null;
@@ -16,7 +16,7 @@ class keypair {
 	};
 
 	public constructor(
-		options: rsa["options"],
+		options: asymmetric["options"],
 		key_options: unknown[],
 		keypair: CryptoKeyPair
 	) {
@@ -53,9 +53,9 @@ class keypair {
 
 			this.lastRotation = Date.now();
 
-			return ReturnTrue(result);
+			return Return(true, result);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 
@@ -67,7 +67,7 @@ class keypair {
 		try {
 			const encrypted_data: string[] = [];
 			const chunks = JSON.stringify(data).match(/[\s\S]{1,110}/g);
-			if (!chunks) return ReturnFalse(new Error("Data is too large to encrypt"));
+			if (!chunks) return Return(false, new Error("Data is too large to encrypt"));
 			for (const chunk of chunks) {
 				const encrypted_chunk = await crypto.subtle.encrypt(
 					this.options.gen_params,
@@ -78,13 +78,14 @@ class keypair {
 				encrypted_data.push(Buffer.from(encrypted_chunk).toString("base64"));
 			}
 
-			return ReturnTrue(encrypted_data.join("|"));
+			return Return(true, encrypted_data.join("|"));
 		} catch (err) {
-			if (!this.keys.p || key == this.keys.p.publicKey) return ReturnFalse(err as Error);
+			if (!this.keys.p || key == this.keys.p.publicKey)
+				return Return(false, err as Error);
 
 			const previous_key = await this.encrypt(data, this.keys.p.publicKey);
-			if (previous_key.status) return ReturnTrue(previous_key);
-			else return ReturnFalse(err as Error);
+			if (previous_key.status) return Return(true, previous_key.data);
+			else return Return(false, err as Error);
 		}
 	}
 
@@ -108,21 +109,22 @@ class keypair {
 				decrypted_data.push(decoder.decode(decrypted_chunk));
 			}
 
-			return ReturnTrue(JSON.parse(decrypted_data.join("")));
+			return Return(true, JSON.parse(decrypted_data.join("")));
 		} catch (err) {
-			if (!this.keys.p || key == this.keys.p.privateKey) return ReturnFalse(err as Error);
+			if (!this.keys.p || key == this.keys.p.privateKey)
+				return Return(false, err as Error);
 
 			const previous_key = await this.decrypt(data, this.keys.p.privateKey);
-			if (previous_key.status) return ReturnTrue(previous_key.data);
-			else return ReturnFalse(err as Error);
+			if (previous_key.status) return Return(true, previous_key.data);
+			else return Return(false, err as Error);
 		}
 	}
 }
-export { keypair as RSAKeypair };
+export { AsymmetricKeys };
 
-export default class rsa {
-	public options: UcryptType["rsa"];
-	public constructor(options: UcryptType["rsa"]) {
+export default class asymmetric {
+	public options: UcryptType["asymmetric"];
+	public constructor(options: UcryptType["asymmetric"]) {
 		this.options = options;
 	}
 
@@ -130,7 +132,7 @@ export default class rsa {
 		extractable: boolean,
 		usages: KeyUsage[],
 		gen_params_override: Partial<RsaHashedKeyGenParams | EcKeyGenParams> = {}
-	): Promise<ReturnType<keypair>> {
+	): Promise<ReturnType<AsymmetricKeys>> {
 		try {
 			const gen_params = this.options.gen_params;
 			Object.assign(gen_params, gen_params_override);
@@ -140,15 +142,15 @@ export default class rsa {
 				usages
 			);
 
-			const keys = new keypair(
+			const keys = new AsymmetricKeys(
 				this.options,
 				[gen_params, extractable, usages],
 				crypto_keys
 			);
 
-			return ReturnTrue(keys);
+			return Return(true, keys);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 import { JWTPayloadType } from "../types/JWTPayloadType";
-import { ReturnFalse, ReturnTrue, ReturnType } from "../types/ReturnType";
+import { Return, ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 import { b64 } from "../util/b64";
 
@@ -37,22 +37,22 @@ export default class jwt {
 				encoder.encode(data_to_sign)
 			);
 
-			const encoded_signature = b64.fromArrayBuffer(signature);
+			const encoded_signature = b64.fromArrayBuffer(signature); // BROKEN
 
-			return ReturnTrue(data_to_sign + "." + encoded_signature);
+			return Return(true, data_to_sign + "." + encoded_signature);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 
 	public async verify(token: string, secret: string): Promise<ReturnType<boolean>> {
 		try {
 			const parts = token.split(".");
-			if (parts.length !== 3) return ReturnFalse(new Error("Invalid JWT format"));
+			if (parts.length !== 3) return Return(false, new Error("Invalid JWT format"));
 
 			const [encoded_header, encoded_payload, encoded_signature] = parts;
 			if (!encoded_header || !encoded_payload || !encoded_signature)
-				return ReturnFalse(new Error("Invalid JWT format"));
+				return Return(false, new Error("Invalid JWT format"));
 
 			const data_to_verify = encoded_header + "." + encoded_payload;
 
@@ -75,9 +75,9 @@ export default class jwt {
 				encoder.encode(data_to_verify)
 			);
 
-			return ReturnTrue(verify);
+			return Return(true, verify);
 		} catch (err) {
-			return ReturnFalse(err as Error);
+			return Return(false, err as Error);
 		}
 	}
 }
