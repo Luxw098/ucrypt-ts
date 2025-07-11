@@ -1,5 +1,5 @@
-import { JWTPayloadType } from "../types/JWTPayloadType";
-import { Return, ReturnType } from "../types/ReturnType";
+import { type JWTPayloadType } from "../types/JWTPayloadType";
+import { Return, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 import { b64 } from "../util/b64";
 

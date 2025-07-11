@@ -1,4 +1,4 @@
-import { Return, ReturnType } from "../types/ReturnType";
+import { Return, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 import { SymmetricKey } from "./symmetric";
 

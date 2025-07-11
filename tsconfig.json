@@ -1,34 +1,35 @@
 {
-  // This is based on https://bun.sh/docs/typescript#suggested-compileroptions
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "docs": "https://bun.sh/docs/typescript",
-  "include": ["src", "test"],
-  
-  "compilerOptions": {
-    // Enable latest features
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
+	// This is based on https://bun.sh/docs/typescript#suggested-compileroptions
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"docs": "https://bun.sh/docs/typescript",
+	"include": ["src"],
 
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "declaration": true,
-    "declarationMap": true,
-    "declarationDir": "dist",
-    
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    
-    // Some stricter flags
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noPropertyAccessFromIndexSignature": true,
+	"compilerOptions": {
+		// Enable latest features
+		"lib": ["ESNext", "DOM"],
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleDetection": "force",
+		"jsx": "react-jsx",
+		"allowJs": true,
 
-    "esModuleInterop": true
-  }
+		// Bundler mode
+		"moduleResolution": "node10",
+		"outDir": "dist",
+		"declaration": true,
+
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+
+		// Some stricter flags
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noPropertyAccessFromIndexSignature": true,
+
+		"esModuleInterop": true
+	}
 }

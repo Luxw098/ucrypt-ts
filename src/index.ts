@@ -5,12 +5,12 @@ import type { UcryptType } from "./types/UcryptType";
 import { defaults } from "./defaults";
 import asymmetric from "./class/asymmetric";
 import jwt from "./class/jwt";
-import { Return, ReturnType } from "./types/ReturnType";
+import { Return, type ReturnType } from "./types/ReturnType";
 import { b32 } from "./util/b32";
 import symmetric from "./class/symmetric";
 import exchange from "./class/exchange";
 
-export default class ucrypt {
+export default class {
 	public hash: hash;
 	public exchange: exchange;
 	public jwt: jwt;
@@ -20,7 +20,7 @@ export default class ucrypt {
 	public mfa: mfa;
 
 	private options: UcryptType;
-	public constructor(options: Partial<typeof this.options> = {}) {
+	public constructor(options: Partial<UcryptType> = {}) {
 		this.options = {
 			...defaults,
 			...options
@@ -45,5 +45,3 @@ export default class ucrypt {
 		}
 	}
 }
-
-// Ekato, Reference moved to `types/UcryptType.ts`

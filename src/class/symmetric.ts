@@ -1,5 +1,5 @@
-import { Return, ReturnType } from "../types/ReturnType";
-import type { UcryptType } from "../types/UcryptType";
+import { Return, type ReturnType } from "../types/ReturnType";
+import { type UcryptType } from "../types/UcryptType";
 
 import "../compression-polyfill";
 

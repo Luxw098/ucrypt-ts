@@ -1,7 +1,7 @@
 // Create one-to-one Diffie-Hellman key exchange between two users
 // Create Tree-based group Diffie-Hellman key exchange between a group
 
-import { Return, ReturnType } from "../types/ReturnType";
+import { Return, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 
 import "../compression-polyfill";
@@ -62,7 +62,7 @@ export default class exchange {
 					g: g,
 					s: s
 				},
-				a
+				parseInt(a)
 			]);
 		} catch (err) {
 			return Return(false, err as Error);

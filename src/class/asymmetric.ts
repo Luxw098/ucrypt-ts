@@ -1,5 +1,5 @@
-import { Return, ReturnType } from "../types/ReturnType";
-import { UcryptType } from "../types/UcryptType";
+import { Return, type ReturnType } from "../types/ReturnType";
+import { type UcryptType } from "../types/UcryptType";
 
 class AsymmetricKeys {
 	private lastRotation = Date.now();
@@ -59,64 +59,43 @@ class AsymmetricKeys {
 		}
 	}
 
-	public async encrypt(
-		data: unknown,
-		publicKey?: CryptoKey
-	): Promise<ReturnType<string>> {
-		const key = publicKey ?? this.keys.c.publicKey;
+	public async encrypt(data: unknown): Promise<ReturnType<string>> {
 		try {
-			const encrypted_data: string[] = [];
-			const chunks = JSON.stringify(data).match(/[\s\S]{1,110}/g);
-			if (!chunks) return Return(false, new Error("Data is too large to encrypt"));
-			for (const chunk of chunks) {
-				const encrypted_chunk = await crypto.subtle.encrypt(
-					this.options.gen_params,
-					key,
-					new TextEncoder().encode(chunk)
-				);
-
-				encrypted_data.push(Buffer.from(encrypted_chunk).toString("base64"));
-			}
-
-			return Return(true, encrypted_data.join("|"));
+			return await encrypt(data, this.keys.c.publicKey, this.options.gen_params);
 		} catch (err) {
-			if (!this.keys.p || key == this.keys.p.publicKey)
-				return Return(false, err as Error);
+			try {
+				if (!this.keys.p) return Return(false, err as Error);
 
-			const previous_key = await this.encrypt(data, this.keys.p.publicKey);
-			if (previous_key.status) return Return(true, previous_key.data);
-			else return Return(false, err as Error);
+				const previous_key = await encrypt(
+					data,
+					this.keys.p.publicKey,
+					this.options.gen_params
+				);
+				if (previous_key.status) return Return(true, previous_key.data);
+				else return Return(false, err as Error);
+			} catch {
+				return Return(false, err as Error);
+			}
 		}
 	}
 
-	public async decrypt(
-		data: string,
-		privateKey?: CryptoKey
-	): Promise<ReturnType<string>> {
-		const key = privateKey ?? this.keys.c.privateKey;
+	public async decrypt(data: string): Promise<ReturnType<string>> {
 		try {
-			const decrypted_data = [];
-			const decoder = new TextDecoder();
-			const chunks = data.split("|");
-			for (const chunk of chunks) {
-				const decoded_chunk = Buffer.from(chunk, "base64");
-				const decrypted_chunk = await crypto.subtle.decrypt(
-					this.options.gen_params,
-					key,
-					decoded_chunk
-				);
-
-				decrypted_data.push(decoder.decode(decrypted_chunk));
-			}
-
-			return Return(true, JSON.parse(decrypted_data.join("")));
+			return await decrypt(data, this.keys.c.privateKey, this.options.gen_params);
 		} catch (err) {
-			if (!this.keys.p || key == this.keys.p.privateKey)
-				return Return(false, err as Error);
+			try {
+				if (!this.keys.p) return Return(false, err as Error);
 
-			const previous_key = await this.decrypt(data, this.keys.p.privateKey);
-			if (previous_key.status) return Return(true, previous_key.data);
-			else return Return(false, err as Error);
+				const previous_key = await decrypt(
+					data,
+					this.keys.p.privateKey,
+					this.options.gen_params
+				);
+				if (previous_key.status) return Return(true, previous_key.data);
+				else return Return(false, err as Error);
+			} catch {
+				return Return(false, err as Error);
+			}
 		}
 	}
 }
@@ -153,4 +132,50 @@ export default class asymmetric {
 			return Return(false, err as Error);
 		}
 	}
+
+	public async encrypt(data: unknown, key: CryptoKey): Promise<ReturnType<string>> {
+		return await encrypt(data, key, this.options.gen_params);
+	}
+	public async decrypt(data: string, key: CryptoKey): Promise<ReturnType<string>> {
+		return await decrypt(data, key, this.options.gen_params);
+	}
+}
+
+async function encrypt(
+	data: unknown,
+	key: CryptoKey,
+	gen_params: UcryptType["asymmetric"]["gen_params"]
+): Promise<ReturnType<string>> {
+	const encrypted_data: string[] = [];
+	const chunks = JSON.stringify(data).match(/[\s\S]{1,110}/g);
+	if (!chunks) return Return(false, new Error("Data is too large to encrypt"));
+	for (const chunk of chunks) {
+		const encrypted_chunk = await crypto.subtle.encrypt(
+			gen_params,
+			key,
+			new TextEncoder().encode(chunk)
+		);
+
+		encrypted_data.push(Buffer.from(encrypted_chunk).toString("base64"));
+	}
+
+	return Return(true, encrypted_data.join("|"));
+}
+
+async function decrypt(
+	data: string,
+	key: CryptoKey,
+	gen_params: UcryptType["asymmetric"]["gen_params"]
+): Promise<ReturnType<string>> {
+	const decrypted_data = [];
+	const decoder = new TextDecoder();
+	const chunks = data.split("|");
+	for (const chunk of chunks) {
+		const decoded_chunk = Buffer.from(chunk, "base64");
+		const decrypted_chunk = await crypto.subtle.decrypt(gen_params, key, decoded_chunk);
+
+		decrypted_data.push(decoder.decode(decrypted_chunk));
+	}
+
+	return Return(true, JSON.parse(decrypted_data.join("")));
 }

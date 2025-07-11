@@ -5,11 +5,7 @@ import prettierConfig from "eslint-config-prettier";
 import globals from "globals";
 
 export default [
-	// Base ESLint recommended rules
-	eslint.configs.recommended,
-
 	// Add TypeScript support and rules
-	...tseslint.configs.recommended,
 	...tseslint.configs.recommendedTypeChecked,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
@@ -27,7 +23,7 @@ export default [
 			},
 			parser: tseslint.parser,
 			parserOptions: {
-				project: "./tsconfig.json",
+				project: "tsconfig.json",
 				tsconfigRootDir: ".",
 				ecmaVersion: "latest",
 				sourceType: "module"
