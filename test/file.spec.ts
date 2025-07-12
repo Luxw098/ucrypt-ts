@@ -25,7 +25,7 @@ afterEach(() => {
 test("file/encrypt", async () => {
 	const file = fs.readFileSync(test_file_path).buffer;
 	const result = await uc.file.encrypt(file, "test-password");
-
+	console.log(result);
 	expect(result.status).toBe(true);
 	expect(result.data).toBeInstanceOf(Uint8Array);
 });

@@ -1,5 +1,6 @@
 import { Return, type ReturnType } from "../types/ReturnType";
 import { type UcryptType } from "../types/UcryptType";
+import { b64 } from "../util/b64";
 
 class AsymmetricKeys {
 	private lastRotation = Date.now();

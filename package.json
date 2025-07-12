@@ -2,7 +2,7 @@
 	"name": "ucrypt-ts",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"version": "1.8.0",
+	"version": "1.8.4",
 	"type": "module",
 	"files": [
 		"dist"
@@ -21,6 +21,7 @@
 		"@eslint/js": "^9.27.0",
 		"@types/bun": "latest",
 		"@types/node": "^22.15.30",
+		"compression-streams-polyfill": "^0.1.7",
 		"eslint": "^9.27.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.1.3",

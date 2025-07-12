@@ -11,10 +11,10 @@
 		"module": "ESNext",
 		"moduleDetection": "force",
 		"jsx": "react-jsx",
-		"allowJs": true,
+		"allowJs": false,
 
 		// Bundler mode
-		"moduleResolution": "node10",
+		"moduleResolution": "bundler",
 		"outDir": "dist",
 		"declaration": true,
 

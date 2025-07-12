@@ -1,8 +1,6 @@
 import { Return, type ReturnType } from "../types/ReturnType";
 import { type UcryptType } from "../types/UcryptType";
 
-import "../compression-polyfill";
-
 class SymmetricKey {
 	private lastRotation = Date.now();
 

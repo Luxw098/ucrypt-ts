@@ -2,8 +2,6 @@ import { Return, type ReturnType } from "../types/ReturnType";
 import type { UcryptType } from "../types/UcryptType";
 import { SymmetricKey } from "./symmetric";
 
-import "../compression-polyfill";
-
 export default class file {
 	private options: UcryptType["file"];
 	private symmetricKey: SymmetricKey;
@@ -30,7 +28,7 @@ export default class file {
 
 	public async compress(file: Uint8Array): Promise<ReturnType<Uint8Array>> {
 		try {
-			const stream = new globalThis.CompressionStream(this.options.format);
+			const stream = new CompressionStream(this.options.format);
 			const writable = stream.writable;
 			const writer = writable.getWriter();
 
